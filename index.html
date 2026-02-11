@@ -9,12 +9,9 @@
 :root{
   --bg:#070708;
   --text:#ececec;
-  --muted:#c9c9cf;
   --line:rgba(255,255,255,0.14);
-  --glow:rgba(210,210,255,0.18);
+  --blood:#7a1111; /* 어두운 붉은색 */
 }
-
-*{ box-sizing:border-box; }
 
 body{
   margin:0;
@@ -24,14 +21,13 @@ body{
   overflow-x:hidden;
 }
 
-/* 배경 효과 */
+/* 배경 비네팅 */
 .vignette{
   position: fixed;
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(1200px 700px at 50% 35%, rgba(255,255,255,0.06), transparent 60%),
-    radial-gradient(1200px 900px at 50% 55%, transparent 45%, rgba(0,0,0,0.78) 100%);
+    radial-gradient(1200px 900px at 50% 55%, transparent 45%, rgba(0,0,0,0.8) 100%);
   z-index: 1;
 }
 
@@ -48,61 +44,40 @@ body{
 /* 인트로 */
 #intro{
   width:100%;
-  max-width:860px;
+  max-width:600px;
   text-align:center;
   border:1px solid var(--line);
   border-radius:18px;
-  padding:44px 22px;
-  background:rgba(255,255,255,0.05);
-  transition: opacity 700ms ease, transform 700ms ease;
-}
-
-.sigil{
-  width:74px;
-  height:74px;
-  margin:0 auto 18px;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,0.2);
-  box-shadow:0 0 50px var(--glow);
-  animation:breathe 3s ease-in-out infinite;
-}
-
-@keyframes breathe{
-  0%,100%{transform:scale(1);}
-  50%{transform:scale(1.05);}
+  padding:40px 20px;
+  background:rgba(255,255,255,0.04);
+  transition: opacity 600ms ease;
 }
 
 .press{
-  margin-top:24px;
+  margin-top:20px;
   display:inline-block;
   padding:10px 16px;
   border:1px solid rgba(255,255,255,0.3);
   border-radius:10px;
   letter-spacing:3px;
   cursor:pointer;
-  animation:blink 1.8s ease-in-out infinite;
-}
-
-@keyframes blink{
-  0%,100%{opacity:1;}
-  50%{opacity:0.4;}
 }
 
 /* 본문 */
 #mainContent{
   display:none;
   width:100%;
-  max-width:860px;
+  max-width:600px; /* 폭 줄임 */
   border:1px solid var(--line);
   border-radius:18px;
-  padding:34px 22px;
-  background:rgba(10,10,12,0.7);
+  padding:30px 22px;
+  background:rgba(10,10,12,0.75);
   opacity:0;
   transform:translateY(10px);
 }
 
 #mainContent.show{
-  animation:appear 900ms ease forwards;
+  animation:appear 800ms ease forwards;
 }
 
 @keyframes appear{
@@ -117,11 +92,18 @@ h1{
 .myth p{
   line-height:1.9;
   margin-bottom:14px;
+  font-size:15px;
+}
+
+/* 붉은 강조 */
+.blood{
+  color: var(--blood);
+  font-weight:700;
+  letter-spacing:1px;
 }
 
 .fadeOut{
   opacity:0;
-  transform:translateY(-8px);
 }
 </style>
 </head>
@@ -133,7 +115,6 @@ h1{
 <div class="stage">
 
 <section id="intro">
-  <div class="sigil"></div>
   <h2>태초의 신이 먹힌 밤</h2>
   <div class="press" id="pressBtn">PRESS ENTER</div>
 </section>
@@ -143,38 +124,28 @@ h1{
 
   <div class="myth">
     <p>태초에 하나의 신이 세계를 창조하고, 그 위에 군림했다.
-    신은 동시에 여러 피조물을 만들어 자신이 만든 땅을 돌보게 했다.</p>
+    신은 여러 피조물을 만들어 땅을 돌보게 했다.</p>
 
-    <p>그러나 시간이 흐르며 피조물들 사이에는 불만이 싹트기 시작했다.
-    그리고 어느 날, 한 피조물의 선동에 의해 그들은 잠든 신을 덮쳤다.
-    피조물들은 신의 육신을 다섯 조각으로 나누어, 그것을 먹었다.</p>
+    <p>그러나 시간이 흐르자 피조물들 사이에는 불만이 싹텄고,
+    마침내 그들은 잠든 신을 덮쳐 육신을 다섯 조각으로 나누어 먹었다.</p>
 
-    <p><strong>눈, 혀, 심장, 뼈, 그리고 피.</strong></p>
+    <p class="blood">눈, 혀, 심장, 뼈, 그리고 피.</p>
 
-    <p>신을 집어삼킨 순간, 그들은 절대적인 권능을 하나씩 계승했다.
-    눈을 먹은 자는 미래를 꿰뚫어보는 예지력을 얻었고,
-    혀를 먹은 자는 세계를 굴복시키는 언령을 손에 넣었다.
-    심장을 먹은 자는 죽지 않는 생명을,
-    뼈를 먹은 자는 파괴되지 않는 육신을,
-    피를 마신 자는 절대적인 혈맹의 권능을 얻었다.</p>
+    <p>그 순간, 그들은 신의 권능을 계승했다.
+    예지, 언령, 불사의 생명, 파괴되지 않는 육신,
+    그리고 절대적인 혈맹의 힘.</p>
 
-    <p>한낱 피조물에 불과하던 그들은 이제 신의 힘을 행사하는 존재가 되었고,
-    스스로를 ‘신식자(神食者)’라 칭하며
-    신이 창조한 세계를 나누어 통치하기 시작했다.</p>
+    <p>그들은 스스로를 ‘신식자’라 칭하며
+    세계를 나누어 통치하기 시작했다.</p>
 
-    <p>그러나 그들은 미처 깨닫지 못했다.
-    신이 먹힌 그 자리에 남아 있던 것,
-    ‘그림자’의 존재를.</p>
-
-    <p>그 그림자를 훔쳐 달아난 또 다른 피조물이 있었다.
-    그는 신식자들의 지배가 미치지 않는 세계의 경계로 숨어들어,
-    잊힌 신의 부활을 준비하기 시작했다.</p>
+    <p>그러나 신이 사라진 자리에는
+    아무도 보지 못한 그림자가 남아 있었다.</p>
   </div>
 </section>
 
 </div>
 
-<!-- 🎵 BGM (파일명 변경 완료) -->
+<!-- 🎵 BGM -->
 <audio id="bgm" autoplay loop muted>
   <source src="bgm.mp3" type="audio/mpeg">
 </audio>
@@ -200,7 +171,7 @@ function startStory(){
     intro.style.display="none";
     mainContent.style.display="block";
     mainContent.classList.add("show");
-  },600);
+  },500);
 }
 
 document.addEventListener("keydown", e=>{
