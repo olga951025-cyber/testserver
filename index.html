@@ -10,6 +10,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
 
 <style>
+@font-face {
+  font-family: 'NostalgicPoliceVibe';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/Griun_PolSensibility-Rg.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LeeSunShin';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/YiSunShinRegular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root{
   --bg:#070708;
   --text:#ececec;
@@ -171,6 +187,21 @@ h1{
   font-size: 22px;
 }
 
+/* ✅ 창세 신화 페이지 폰트 분리 적용 */
+#page-myth > h1{
+  font-family: 'NostalgicPoliceVibe', "Cinzel", serif;
+}
+
+#page-myth .myth{
+  font-family: 'LeeSunShin', "IM Fell English", Georgia, "Times New Roman", serif;
+}
+
+#page-myth .myth p,
+#page-myth .myth strong,
+#page-myth .myth .blood{
+  font-family: inherit;
+}
+
 #mainContent h1::after{
   content:"";
   display:block;
@@ -194,7 +225,7 @@ h1{
   transform: translateY(0);
 }
 
-/* 창세신화 문단 (너 취향대로 중앙 유지) */
+/* 창세신화 문단 */
 .myth p{
   line-height: 1.55;
   margin: 0 0 8px;
@@ -277,6 +308,8 @@ h1{
 
 .fadeOut{ opacity:0; }
 </style>
+
+  
 </head>
 
 <body>
