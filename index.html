@@ -31,12 +31,20 @@ body{
   overflow-x:hidden;
 }
 
+/* ✅✅ (추가) 스크롤바 숨김: 스크롤은 가능하지만 바는 안 보이게 */
+body{
+  -ms-overflow-style: none;   /* IE/Edge 구버전 */
+  scrollbar-width: none;      /* Firefox */
+}
+body::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+}
+
 /* 상단 메뉴바 */
 .topNav{
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   z-index: 20;
 
   display: flex;
@@ -53,13 +61,11 @@ body{
   pointer-events: none;
   transition: opacity 260ms ease, transform 260ms ease;
 }
-
 .topNav.show{
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
-
 .topNav a{
   font-family: "Cinzel", serif;
   color: rgba(236,236,236,0.78);
@@ -71,15 +77,12 @@ body{
   border: 1px solid transparent;
   transition: opacity 160ms ease, border-color 160ms ease, transform 160ms ease, color 160ms ease, background 160ms ease;
 }
-
 .topNav a:hover{
   opacity: 1;
   border-color: rgba(255,255,255,0.18);
   transform: translateY(-1px);
 }
-
 .topNav a:active{ transform: translateY(0); }
-
 .topNav a.active{
   color: rgba(236,236,236,1);
   border-color: rgba(210,190,120,0.35);
@@ -118,13 +121,11 @@ body{
   background:rgba(255,255,255,0.04);
   transition: opacity 600ms ease;
 }
-
 #intro h2{
   font-family: "Cinzel", serif;
   letter-spacing: 2px;
   font-weight: 600;
 }
-
 .press{
   margin-top:20px;
   display:inline-block;
@@ -160,9 +161,7 @@ body{
   opacity:0;
   transform:translateY(10px);
 }
-
 #mainContent.show{ animation:appear 800ms ease forwards; }
-
 @keyframes appear{ to{opacity:1; transform:translateY(0);} }
 
 h1{
@@ -173,7 +172,6 @@ h1{
   font-weight: 700;
   font-size: 22px;
 }
-
 #mainContent h1::after{
   content:"";
   display:block;
@@ -183,29 +181,23 @@ h1{
   background: linear-gradient(90deg, transparent, rgba(210,190,120,0.45), transparent);
 }
 
-.myth{
-  text-align: center;  
-  margin-top: 18px;
-}
-
+/* 신화 텍스트 */
+.myth{ text-align: center; margin-top: 18px; }
 .myth p{
-  line-height: 1.55;     
-  margin: 0 0 6px;       
+  line-height: 1.55;
+  margin: 0 0 6px;
   font-size: 16px;
   letter-spacing: 0.2px;
   color: rgba(236,236,236,0.92);
 }
+.myth p.blockGap{ margin-top: 12px; }
 
-.myth p.blockGap{
-  margin-top: 12px;     
-}
-
+/* 드롭캡(첫 문단만 inline-block로 안정화) */
 .myth p:first-child{
-  display: inline-block; 
-  text-align: left;      
-  max-width: 560px;      
+  display: inline-block;
+  text-align: left;
+  max-width: 560px;
 }
-
 .myth p:first-child::first-letter{
   float: left;
   font-family: "Cinzel", serif;
@@ -217,20 +209,18 @@ h1{
   text-shadow: 0 0 14px rgba(210,190,120,0.10);
 }
 
-/* 5) 강조문장(붉은 문장) 가운데에서 ‘구절’처럼 보이게 */
-.myth p strong.blood{
-  display: inline-block;
-  padding: 6px 10px;
-  border-top: 1px solid rgba(210,190,120,0.18);
-  border-bottom: 1px solid rgba(210,190,120,0.18);
-}
-
 /* 붉은 강조 */
 .blood{
   color: var(--blood);
   font-weight: 700;
   letter-spacing: 1px;
   text-shadow: 0 0 10px rgba(122,17,17,0.25);
+}
+.myth p strong.blood{
+  display: inline-block;
+  padding: 6px 10px;
+  border-top: 1px solid rgba(210,190,120,0.18);
+  border-bottom: 1px solid rgba(210,190,120,0.18);
 }
 
 .fadeOut{ opacity:0; }
@@ -245,7 +235,6 @@ h1{
   font-family: "Cinzel", serif;
   text-align: center;
 }
-
 .sectionBox{
   border-top: 1px solid rgba(210,190,120,0.20);
   padding-top: 16px;
@@ -256,7 +245,6 @@ h1{
   opacity: 0.92;
   color: rgba(236,236,236,0.90);
 }
-
 .anchorTarget{ scroll-margin-top: 90px; }
 </style>
 </head>
@@ -330,6 +318,7 @@ h1{
 
 </div>
 
+<!-- 🎵 BGM -->
 <audio id="bgm" autoplay loop muted>
   <source src="bgm.mp3" type="audio/mpeg">
 </audio>
@@ -354,6 +343,7 @@ h1{
   bottom: 20px;
   right: 20px;
   z-index: 10;
+
   display: flex;
   align-items: center;
   gap: 14px;
@@ -443,6 +433,38 @@ const sectionEls = sectionIds.map(id => document.getElementById(id)).filter(Bool
 let started = false;
 let fadeTimer = null;
 
+let userScrollLocked = false;
+
+function preventScroll(e){
+  if (!userScrollLocked) return;
+  e.preventDefault();
+}
+
+function preventScrollKeys(e){
+  if (!userScrollLocked) return;
+
+  // 스크롤을 유발하는 키들 막기
+  const keys = ["ArrowUp","ArrowDown","PageUp","PageDown","Home","End"," ","Spacebar"];
+  if (keys.includes(e.key)){
+    e.preventDefault();
+  }
+}
+
+function lockUserScroll(enable){
+  userScrollLocked = enable;
+
+  // wheel/touchmove는 passive:false 여야 preventDefault가 먹음
+  if (enable){
+    window.addEventListener("wheel", preventScroll, { passive:false });
+    window.addEventListener("touchmove", preventScroll, { passive:false });
+    window.addEventListener("keydown", preventScrollKeys, { passive:false });
+  } else {
+    window.removeEventListener("wheel", preventScroll);
+    window.removeEventListener("touchmove", preventScroll);
+    window.removeEventListener("keydown", preventScrollKeys);
+  }
+}
+
 function getTargetVolume(){ return volumeSlider.value / 100; }
 
 function updateBgmButton(){
@@ -526,29 +548,36 @@ function startStory(){
 
     topNav.classList.add("show");
     setupSectionObserver();
+
+    lockUserScroll(true);
   },500);
 }
 
+/* Enter */
 document.addEventListener("keydown", e=>{
   if(e.key==="Enter") startStory();
 });
 
+/* 클릭 */
 if(pressBtn) pressBtn.addEventListener("click", startStory);
 if(intro) intro.addEventListener("click", startStory);
 
 navLinks.forEach(a=>{
-  a.addEventListener("click", ()=>{
+  a.addEventListener("click", (e)=>{
+    
     const id = a.dataset.section;
     if (id) setActiveMenu(id);
   });
 });
 
+/* 볼륨 변경 */
 volumeSlider.addEventListener("input", ()=>{
   if(!bgm.paused){
     fadeTo(getTargetVolume(), 200);
   }
 });
 
+/* 토글 */
 bgmToggle.addEventListener("click", ()=>{
   if(!started){
     startStory();
