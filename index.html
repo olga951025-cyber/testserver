@@ -21,7 +21,7 @@
   font-display: swap;
 }
 
-/* ✅ 인트로 제목 폰트 (요청한 폰트) */
+/* ✅ 인트로 제목 폰트 */
 @font-face {
   font-family: 'NostalgicPoliceVibe';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-6@1.0/Griun_PolSensibility-Rg.woff2') format('woff2');
@@ -30,7 +30,7 @@
   font-display: swap;
 }
 
-/* ✅ 창세 신화 본문 폰트 (누락돼서 안 먹히던 부분) */
+/* ✅ 창세 신화 본문 폰트 */
 @font-face {
   font-family: 'LeeSunShin';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/YiSunShinRegular.woff') format('woff');
@@ -329,6 +329,89 @@ h1{
   color: rgba(236,236,236,0.85);
 }
 
+/* =========================
+   ✅ 지역 섹션 (5개) + 호버 흑백→컬러
+   ========================= */
+.regionGrid{
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  text-align: left;
+}
+
+@media (min-width: 720px){
+  .regionGrid{ grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 720px){
+  .regionCard--wide{ grid-column: 1 / -1; }
+}
+
+.regionCard{
+  border: 1px solid rgba(210,190,120,0.18);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.03);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.45) inset;
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.regionCard:hover{
+  transform: translateY(-2px);
+  border-color: rgba(210,190,120,0.35);
+}
+
+.regionThumb{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(255,255,255,0.02);
+  overflow: hidden;
+}
+
+.regionThumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  /* 기본: 흑백 */
+  filter: grayscale(1) contrast(1.05) brightness(0.92);
+  transform: scale(1.02);
+
+  transition: filter 260ms ease, transform 260ms ease;
+}
+
+.regionCard:hover .regionThumb img{
+  filter: grayscale(0) contrast(1.02) brightness(1);
+  transform: scale(1.06);
+}
+
+/* 모바일/키보드 접근: 포커스에서도 컬러 전환 */
+.regionCard:focus-within .regionThumb img{
+  filter: grayscale(0) contrast(1.02) brightness(1);
+  transform: scale(1.06);
+}
+
+.regionCard h2{
+  margin: 14px 16px 8px;
+  font-family: "Cinzel", serif;
+  letter-spacing: 2px;
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(236,236,236,0.95);
+  text-align: center;
+}
+
+.regionCard p{
+  margin: 0 16px 16px;
+  line-height: 1.6;
+  font-size: 15px;
+  color: rgba(236,236,236,0.90);
+  text-align: center;
+}
+
 .fadeOut{ opacity:0; }
 </style>
 </head>
@@ -453,10 +536,52 @@ h1{
       </div>
     </div>
 
-    <!-- ✅ 3) 지역 (자리만) -->
+    <!-- ✅ 3) 지역 (완성본) -->
     <div class="page" id="page-regions">
       <h1>지역</h1>
-      <p class="lead">지역 추가 예정.</p>
+      <p class="lead">카르니스는 다섯 권역으로 갈라진다.</p>
+
+      <div class="regionGrid">
+        <article class="regionCard">
+          <div class="regionThumb">
+            <img src="assets/img/north.png" alt="백안의 산맥" loading="lazy">
+          </div>
+          <h2>백안의 산맥</h2>
+          <p>만년설과 절벽이 이어지는 북부 산맥.</p>
+        </article>
+
+        <article class="regionCard">
+          <div class="regionThumb">
+            <img src="assets/img/south.png" alt="레티아" loading="lazy">
+          </div>
+          <h2>레티아</h2>
+          <p>지식과 학술의 도시 레티아.</p>
+        </article>
+
+        <article class="regionCard">
+          <div class="regionThumb">
+            <img src="assets/img/east.png" alt="스톤폴" loading="lazy">
+          </div>
+          <h2>스톤폴</h2>
+          <p>늙거나 병드는 것을 치욕으로 여기는 전사들의 무덤.</p>
+        </article>
+
+        <article class="regionCard">
+          <div class="regionThumb">
+            <img src="assets/img/west.png" alt="실렌하임 영지" loading="lazy">
+          </div>
+          <h2>실렌하임 영지</h2>
+          <p>‘첫 아비’ 라자르 실렌하임의 둥지.</p>
+        </article>
+
+        <article class="regionCard regionCard--wide">
+          <div class="regionThumb">
+            <img src="assets/img/central.png" alt="에스테라" loading="lazy">
+          </div>
+          <h2>에스테라</h2>
+          <p>환락의 도시 에스테라.</p>
+        </article>
+      </div>
     </div>
 
     <!-- ✅ 4) 전체 지도 (자리만) -->
@@ -668,7 +793,6 @@ navLinks.forEach(a=>{
     e.preventDefault();
     const key = a.dataset.page;
     if (!started){
-      // 인트로 상태에서 메뉴 누르면 시작부터 시키고 이동
       startStory();
       setTimeout(()=> showPage(key), 600);
       return;
