@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>카르니스 연대기 - 가문</title>
+
+<!-- ✅ 중세풍 폰트 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#070708;
+  --text:#ececec;
+  --line:rgba(255,255,255,0.14);
+  --blood:#7a1111;
+
+  --paper: rgba(12,12,14,0.86);
+  --paper2: rgba(255,255,255,0.035);
+  --gold: rgba(210,190,120,0.55);
+}
+
+html{ scroll-behavior: smooth; }
+
+body{
+  margin:0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "IM Fell English", Georgia, "Times New Roman", serif;
+  overflow-x:hidden;
+}
+
+/* ✅ 상단 메뉴바 (인트로에서는 숨김, 본문에서 show) */
+.topNav{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 20;
+
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+
+  padding: 14px 16px;
+  background: rgba(7,7,8,0.75);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.topNav.show{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.topNav a{
+  font-family: "Cinzel", serif;
+  color: rgba(236,236,236,0.78);
+  text-decoration: none;
+  letter-spacing: 2px;
+  font-size: 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition: opacity 160ms ease, border-color 160ms ease, transform 160ms ease, color 160ms ease, background 160ms ease;
+}
+
+.topNav a:hover{
+  opacity: 1;
+  border-color: rgba(255,255,255,0.18);
+  transform: translateY(-1px);
+}
+
+.topNav a:active{ transform: translateY(0); }
+
+.topNav a.active{
+  color: rgba(236,236,236,1);
+  border-color: rgba(210,190,120,0.35);
+  background: rgba(210,190,120,0.08);
+}
+
+/* 배경 비네팅 */
+.vignette{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 900px at 50% 55%, transparent 45%, rgba(0,0,0,0.82) 100%);
+  z-index: 1;
+}
+
+/* 무대 */
+.stage{
+  position: relative;
+  z-index: 3;
+  min-height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 84px 24px 24px;
+}
+
+/* 인트로 */
+#intro{
+  width:100%;
+  max-width:600px;
+  text-align:center;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:40px 20px;
+  background:rgba(255,255,255,0.04);
+  transition: opacity 600ms ease;
+}
+
+#intro h2{
+  font-family: "Cinzel", serif;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.press{
+  margin-top:20px;
+  display:inline-block;
+  padding:10px 16px;
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:10px;
+  letter-spacing:3px;
+  cursor:pointer;
+  font-family: "Cinzel", serif;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+/* 본문 패널 */
+#mainContent{
+  text-align: center;
+  display:none;
+  width:100%;
+  max-width:760px; /* ✅ 가문 페이지는 카드가 들어가니까 조금 더 넓게 */
+  border-radius:18px;
+  padding:34px 26px;
+
+  background:
+    radial-gradient(800px 500px at 50% 0%, rgba(255,255,255,0.05), transparent 55%),
+    linear-gradient(180deg, var(--paper2), transparent 35%),
+    var(--paper);
+
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.6) inset,
+    0 18px 50px rgba(0,0,0,0.55);
+
+  opacity:0;
+  transform:translateY(10px);
+}
+
+#mainContent.show{ animation:appear 800ms ease forwards; }
+
+@keyframes appear{
+  to{opacity:1; transform:translateY(0);}
+}
+
+h1{
+  font-family: "Cinzel", serif;
+  text-align:center;
+  margin: 6px 0 16px;
+  letter-spacing: 4px;
+  font-weight: 700;
+  font-size: 22px;
+}
+
+#mainContent h1::after{
+  content:"";
+  display:block;
+  width: 72%;
+  height: 1px;
+  margin: 14px auto 0;
+  background: linear-gradient(90deg, transparent, rgba(210,190,120,0.45), transparent);
+}
+
+/* ✅ 페이지 설명 문장 */
+.lead{
+  margin: 16px auto 18px;
+  max-width: 640px;
+  line-height: 1.65;
+  font-size: 16px;
+  color: rgba(236,236,236,0.92);
+  opacity: 0.95;
+}
+
+/* ✅ 가문 카드 레이아웃 (한 페이지에 보기 좋게) */
+.familyGrid{
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  text-align: left;
+}
+
+/* 화면이 넓으면 2열 */
+@media (min-width: 720px){
+  .familyGrid{ grid-template-columns: 1fr 1fr; }
+}
+
+/* 카드 */
+.familyCard{
+  border: 1px solid rgba(210,190,120,0.18);
+  border-radius: 16px;
+  padding: 16px 16px 14px;
+  background: rgba(255,255,255,0.03);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.45) inset;
+}
+
+.familyCard h2{
+  margin: 0 0 10px;
+  font-family: "Cinzel", serif;
+  letter-spacing: 2px;
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(236,236,236,0.95);
+  text-align: center; /* ✅ 너 취향: 타이틀은 중앙 */
+}
+
+/* 카드 안 텍스트 */
+.familyCard p{
+  margin: 0 0 8px;
+  line-height: 1.6;
+  font-size: 15px;
+  color: rgba(236,236,236,0.90);
+}
+
+/* 라벨 느낌 */
+.tagRow{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center; /* ✅ 태그도 중앙 */
+}
+
+.tag{
+  font-family: "Cinzel", serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.03);
+  color: rgba(236,236,236,0.85);
+}
+
+/* 붉은 강조(필요하면 가문 페이지에서도 사용 가능) */
+.blood{
+  color: var(--blood);
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(122,17,17,0.25);
+}
+
+/* 페이드 */
+.fadeOut{ opacity:0; }
+</style>
+</head>
+
+<body>
+
+<!-- ✅ 상단 메뉴: 다른 페이지로 이동 -->
+<nav class="topNav" id="topNav">
+  <a href="index.html">창세 신화</a>
+  <a href="families.html" class="active">가문</a>
+  <a href="regions.html">지역</a>
+  <a href="map.html">전체 지도</a>
+</nav>
+
+<div class="vignette"></div>
+
+<div class="stage">
+
+  <!-- ✅ 인트로 -->
+  <section id="intro">
+    <h2>가문 기록</h2>
+    <div class="press" id="pressBtn">PRESS ENTER</div>
+  </section>
+
+  <!-- ✅ 본문 -->
+  <section id="mainContent">
+    <h1>가문</h1>
+
+    <p class="lead">
+      신의 육신을 나눠 삼킨 다섯 혈통은 서로 다른 권능과 금기를 물려받았다.
+      각 가문은 영토의 기후와 질서에 맞춰 스스로를 다듬었고,
+      그 과정에서 같은 이름의 힘은 서로 다른 형태로 변질되었다.
+    </p>
+
+    <div class="familyGrid">
+      <article class="familyCard">
+        <h2>눈의 일족</h2>
+        <p>예지와 계시를 다룬다. 태어나는 자는 모두 <span class="blood">실명</span>으로 시작한다.</p>
+        <p>대신 ‘미래를 보는 눈’은 혈통 속에 남아, 선택과 대가를 요구한다.</p>
+        <div class="tagRow">
+          <span class="tag">권능: 예지</span>
+          <span class="tag">금기: 시선</span>
+          <span class="tag">영토: 북부 산맥</span>
+        </div>
+      </article>
+
+      <article class="familyCard">
+        <h2>혀의 일족</h2>
+        <p>말과 서약이 곧 법이 된다. 언령은 현실을 구부리지만, 거짓은 피를 부른다.</p>
+        <p>그들의 목소리는 축복이자 무기다.</p>
+        <div class="tagRow">
+          <span class="tag">권능: 언령</span>
+          <span class="tag">금기: 거짓</span>
+          <span class="tag">영토: 남부 평야</span>
+        </div>
+      </article>
+
+      <article class="familyCard">
+        <h2>심장의 일족</h2>
+        <p>죽지 않는 생명과 회복을 다룬다. 하지만 불사에는 ‘끝나지 않는 대가’가 따른다.</p>
+        <p>그들의 피는 맥박처럼 질서를 강요한다.</p>
+        <div class="tagRow">
+          <span class="tag">권능: 불사</span>
+          <span class="tag">금기: 안식</span>
+          <span class="tag">영토: 중앙 요충지</span>
+        </div>
+      </article>
+
+      <article class="familyCard">
+        <h2>뼈의 일족</h2>
+        <p>파괴되지 않는 육신을 좇는다. 전투와 시험을 신앙처럼 여긴다.</p>
+        <p>강인함은 미덕이지만, 지나치면 인간성을 깎아낸다.</p>
+        <div class="tagRow">
+          <span class="tag">권능: 강체</span>
+          <span class="tag">금기: 연약</span>
+          <span class="tag">영토: 동부 불모지</span>
+        </div>
+      </article>
+
+      <article class="familyCard">
+        <h2>피의 일족</h2>
+        <p>혈맹과 귀속의 힘을 다룬다. 맹세는 생존을 보장하지만, 자유를 거둔다.</p>
+        <p>그들의 계약은 달콤하고 잔혹하다.</p>
+        <div class="tagRow">
+          <span class="tag">권능: 혈맹</span>
+          <span class="tag">금기: 배반</span>
+          <span class="tag">영토: 서부 음지</span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</div>
+
+<!-- 🎵 BGM -->
+<audio id="bgm" autoplay loop muted>
+  <source src="bgm.mp3" type="audio/mpeg">
+</audio>
+
+<div id="audioControl">
+  <button id="bgmToggle" aria-label="BGM Toggle">
+    <svg id="playIcon" viewBox="0 0 24 24">
+      <polygon points="8,5 19,12 8,19"></polygon>
+    </svg>
+
+    <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
+      <rect x="6" y="5" width="4" height="14"></rect>
+      <rect x="14" y="5" width="4" height="14"></rect>
+    </svg>
+  </button>
+
+  <input type="range" id="volumeSlider" min="0" max="100" value="50">
+</div>
+
+<style>
+/* 오디오 컨트롤 (기존 그대로) */
+#audioControl{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+#volumeSlider{
+  width: 120px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+#volumeSlider::-webkit-slider-runnable-track{
+  height: 2px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 2px;
+}
+
+#volumeSlider::-moz-range-track{
+  height: 2px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 2px;
+}
+
+#volumeSlider::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  margin-top: -4px;
+  transition: transform 0.2s ease;
+}
+
+#volumeSlider::-moz-range-thumb{
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  border: none;
+  transition: transform 0.2s ease;
+}
+
+#volumeSlider:hover::-webkit-slider-thumb{ transform: scale(1.2); }
+#volumeSlider:hover::-moz-range-thumb{ transform: scale(1.2); }
+
+#bgmToggle{
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+#bgmToggle svg{
+  width: 22px;
+  height: 22px;
+  fill: white;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+#bgmToggle:hover svg{
+  opacity: 1;
+  transform: scale(1.1);
+}
+</style>
+
+<script>
+const intro = document.getElementById("intro");
+const mainContent = document.getElementById("mainContent");
+const pressBtn = document.getElementById("pressBtn");
+
+const bgm = document.getElementById("bgm");
+const volumeSlider = document.getElementById("volumeSlider");
+const bgmToggle = document.getElementById("bgmToggle");
+
+const playIcon = document.getElementById("playIcon");
+const pauseIcon = document.getElementById("pauseIcon");
+
+const topNav = document.getElementById("topNav");
+
+let started = false;
+let fadeTimer = null;
+
+function getTargetVolume(){
+  return volumeSlider.value / 100;
+}
+
+function updateBgmButton(){
+  if(bgm.paused){
+    playIcon.style.display = "block";
+    pauseIcon.style.display = "none";
+  } else {
+    playIcon.style.display = "none";
+    pauseIcon.style.display = "block";
+  }
+}
+
+function fadeTo(target, duration = 600, onDone){
+  if (fadeTimer) clearInterval(fadeTimer);
+
+  const startVol = bgm.volume;
+  const diff = target - startVol;
+  const steps = Math.max(1, Math.floor(duration / 30));
+  let currentStep = 0;
+
+  fadeTimer = setInterval(()=>{
+    currentStep++;
+    const progress = currentStep / steps;
+    bgm.volume = startVol + diff * progress;
+
+    if (currentStep >= steps){
+      clearInterval(fadeTimer);
+      fadeTimer = null;
+      bgm.volume = target;
+      if (onDone) onDone();
+    }
+  }, 30);
+}
+
+function startPage(){
+  if(started) return;
+  started = true;
+
+  intro.classList.add("fadeOut");
+
+  bgm.muted = false;
+  bgm.volume = 0;
+
+  bgm.play().then(()=>{
+    fadeTo(getTargetVolume(), 800);
+    updateBgmButton();
+  }).catch(()=>{});
+
+  setTimeout(()=>{
+    intro.style.display="none";
+    mainContent.style.display="block";
+    mainContent.classList.add("show");
+
+    topNav.classList.add("show");
+  },500);
+}
+
+/* Enter */
+document.addEventListener("keydown", e=>{
+  if(e.key==="Enter") startPage();
+});
+
+/* 클릭 */
+if(pressBtn) pressBtn.addEventListener("click", startPage);
+if(intro) intro.addEventListener("click", startPage);
+
+/* 볼륨 변경 */
+volumeSlider.addEventListener("input", ()=>{
+  if(!bgm.paused){
+    fadeTo(getTargetVolume(), 200);
+  }
+});
+
+/* 토글 */
+bgmToggle.addEventListener("click", ()=>{
+  if(!started){
+    startPage();
+    return;
+  }
+
+  if(bgm.paused){
+    bgm.volume = 0;
+    bgm.play().then(()=>{
+      fadeTo(getTargetVolume(), 500);
+      updateBgmButton();
+    });
+  } else {
+    fadeTo(0, 400, ()=>{
+      bgm.pause();
+      updateBgmButton();
+    });
+  }
+});
+
+updateBgmButton();
+</script>
+
+</body>
+</html>
