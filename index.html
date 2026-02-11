@@ -194,12 +194,14 @@ h1{
 
 #page-myth .myth{
   font-family: 'LeeSunShin', "IM Fell English", Georgia, "Times New Roman", serif;
+  font-weight: 300; /* ✅ 본문 두께 완화 */
 }
 
 #page-myth .myth p,
 #page-myth .myth strong,
 #page-myth .myth .blood{
   font-family: inherit;
+  font-weight: inherit;
 }
 
 #mainContent h1::after{
@@ -227,7 +229,7 @@ h1{
 
 /* 창세신화 문단 */
 .myth p{
-  line-height: 1.55;
+  line-height: 1.75; /* ✅ 줄간격 늘려 가독성 개선 */
   margin: 0 0 8px;
   font-size: 16px;
   color: rgba(236,236,236,0.92);
@@ -235,7 +237,7 @@ h1{
 
 .blood{
   color: var(--blood);
-  font-weight:700;
+  font-weight: 400; /* ✅ 700 -> 400 (색/그림자만으로 강조) */
   letter-spacing:1px;
   text-shadow: 0 0 10px rgba(122,17,17,0.25);
 }
@@ -308,6 +310,7 @@ h1{
 
 .fadeOut{ opacity:0; }
 </style>
+
 
   
 </head>
