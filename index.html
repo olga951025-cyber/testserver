@@ -65,6 +65,7 @@ body{
 
 /* 본문 */
 #mainContent{
+  text-align: center;
   display:none;
   width:100%;
   max-width:600px; /* 폭 줄임 */
@@ -160,13 +161,35 @@ h1{
   <source src="bgm.mp3" type="audio/mpeg">
 </audio>
 
+<!-- 🔊 볼륨 조절 -->
+<div id="volumeControl">
+  <input type="range" id="volumeSlider" min="0" max="100" value="50">
+</div>
+
+<style>
+#volumeControl{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+#volumeSlider{
+  width: 120px;
+}
+</style>
+
 <script>
 const intro = document.getElementById("intro");
 const mainContent = document.getElementById("mainContent");
 const pressBtn = document.getElementById("pressBtn");
 const bgm = document.getElementById("bgm");
+const volumeSlider = document.getElementById("volumeSlider");
 
 let started = false;
+
+/* 기본 볼륨 50% */
+bgm.volume = 0.5;
 
 function startStory(){
   if(started) return;
@@ -184,12 +207,19 @@ function startStory(){
   },500);
 }
 
+/* Enter 키로 시작 */
 document.addEventListener("keydown", e=>{
   if(e.key==="Enter") startStory();
 });
 
+/* 클릭으로도 시작 (모바일 대응) */
 pressBtn.addEventListener("click", startStory);
 intro.addEventListener("click", startStory);
+
+/* 볼륨 슬라이더 작동 */
+volumeSlider.addEventListener("input", function(){
+  bgm.volume = volumeSlider.value / 100;
+});
 </script>
 
 </body>
