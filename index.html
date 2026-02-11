@@ -156,40 +156,41 @@ h1{
 
 </div>
 
-<!-- 🎵 BGM -->
+  <!-- 🎵 BGM -->
 <audio id="bgm" autoplay loop muted>
   <source src="bgm.mp3" type="audio/mpeg">
 </audio>
 
-<!-- 🎧 재생 버튼 -->
-<button id="bgmToggle" aria-label="BGM Toggle">
-  <!-- Play -->
-  <svg id="playIcon" viewBox="0 0 24 24">
-    <polygon points="8,5 19,12 8,19"></polygon>
-  </svg>
+<div id="audioControl">
+  <!-- 🎧 재생 버튼 -->
+  <button id="bgmToggle" aria-label="BGM Toggle">
+    <!-- Play -->
+    <svg id="playIcon" viewBox="0 0 24 24">
+      <polygon points="8,5 19,12 8,19"></polygon>
+    </svg>
 
-  <!-- Pause -->
-  <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
-    <rect x="6" y="5" width="4" height="14"></rect>
-    <rect x="14" y="5" width="4" height="14"></rect>
-  </svg>
-</button>
+    <!-- Pause -->
+    <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
+      <rect x="6" y="5" width="4" height="14"></rect>
+      <rect x="14" y="5" width="4" height="14"></rect>
+    </svg>
+  </button>
 
-<!-- 🔊 볼륨 -->
-<div id="volumeControl">
   <input type="range" id="volumeSlider" min="0" max="100" value="50">
 </div>
 
 <style>
-/* 볼륨 위치 */
-#volumeControl{
+#audioControl{
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 10;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-/* 슬라이더 기본 리셋 */
 #volumeSlider{
   width: 120px;
   -webkit-appearance: none;
@@ -198,7 +199,6 @@ h1{
   cursor: pointer;
 }
 
-/* 트랙 */
 #volumeSlider::-webkit-slider-runnable-track{
   height: 2px;
   background: rgba(255,255,255,0.4);
@@ -211,7 +211,6 @@ h1{
   border-radius: 2px;
 }
 
-/* 썸 */
 #volumeSlider::-webkit-slider-thumb{
   -webkit-appearance: none;
   width: 10px;
@@ -231,7 +230,6 @@ h1{
   transition: transform 0.2s ease;
 }
 
-/* 호버 */
 #volumeSlider:hover::-webkit-slider-thumb{
   transform: scale(1.2);
 }
@@ -240,17 +238,13 @@ h1{
   transform: scale(1.2);
 }
 
-/* 재생 버튼 */
 #bgmToggle{
-  position: fixed;
-  bottom: 22px;
-  right: 160px;
-  z-index: 10;
-
   background: none;
   border: none;
   cursor: pointer;
-  padding: 6px;
+  padding: 0;
+  display: flex;
+  align-items: center;
 }
 
 #bgmToggle svg{
@@ -281,12 +275,10 @@ const pauseIcon = document.getElementById("pauseIcon");
 let started = false;
 let fadeTimer = null;
 
-/* 목표 볼륨 */
 function getTargetVolume(){
   return volumeSlider.value / 100;
 }
 
-/* 아이콘 상태 */
 function updateBgmButton(){
   if(bgm.paused){
     playIcon.style.display = "block";
@@ -297,7 +289,6 @@ function updateBgmButton(){
   }
 }
 
-/* 페이드 */
 function fadeTo(target, duration = 600, onDone){
   if (fadeTimer) clearInterval(fadeTimer);
 
@@ -320,7 +311,6 @@ function fadeTo(target, duration = 600, onDone){
   }, 30);
 }
 
-/* 시작 */
 function startStory(){
   if(started) return;
   started = true;
@@ -381,6 +371,7 @@ bgmToggle.addEventListener("click", ()=>{
 
 updateBgmButton();
 </script>
+
 
 </body>
 </html>
