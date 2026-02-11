@@ -161,12 +161,27 @@ h1{
   <source src="bgm.mp3" type="audio/mpeg">
 </audio>
 
-<!-- 🔊 볼륨 조절 -->
+<!-- 🎧 재생 버튼 -->
+<button id="bgmToggle" aria-label="BGM Toggle">
+  <!-- Play -->
+  <svg id="playIcon" viewBox="0 0 24 24">
+    <polygon points="8,5 19,12 8,19"></polygon>
+  </svg>
+
+  <!-- Pause -->
+  <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
+    <rect x="6" y="5" width="4" height="14"></rect>
+    <rect x="14" y="5" width="4" height="14"></rect>
+  </svg>
+</button>
+
+<!-- 🔊 볼륨 -->
 <div id="volumeControl">
   <input type="range" id="volumeSlider" min="0" max="100" value="50">
 </div>
 
 <style>
+/* 볼륨 위치 */
 #volumeControl{
   position: fixed;
   bottom: 20px;
@@ -174,8 +189,81 @@ h1{
   z-index: 10;
 }
 
+/* 슬라이더 기본 리셋 */
 #volumeSlider{
   width: 120px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* 트랙 */
+#volumeSlider::-webkit-slider-runnable-track{
+  height: 2px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 2px;
+}
+
+#volumeSlider::-moz-range-track{
+  height: 2px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 2px;
+}
+
+/* 썸 */
+#volumeSlider::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  margin-top: -4px;
+  transition: transform 0.2s ease;
+}
+
+#volumeSlider::-moz-range-thumb{
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  border: none;
+  transition: transform 0.2s ease;
+}
+
+/* 호버 */
+#volumeSlider:hover::-webkit-slider-thumb{
+  transform: scale(1.2);
+}
+
+#volumeSlider:hover::-moz-range-thumb{
+  transform: scale(1.2);
+}
+
+/* 재생 버튼 */
+#bgmToggle{
+  position: fixed;
+  bottom: 22px;
+  right: 160px;
+  z-index: 10;
+
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+}
+
+#bgmToggle svg{
+  width: 22px;
+  height: 22px;
+  fill: white;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+#bgmToggle:hover svg{
+  opacity: 1;
+  transform: scale(1.1);
 }
 </style>
 
@@ -185,12 +273,54 @@ const mainContent = document.getElementById("mainContent");
 const pressBtn = document.getElementById("pressBtn");
 const bgm = document.getElementById("bgm");
 const volumeSlider = document.getElementById("volumeSlider");
+const bgmToggle = document.getElementById("bgmToggle");
+
+const playIcon = document.getElementById("playIcon");
+const pauseIcon = document.getElementById("pauseIcon");
 
 let started = false;
+let fadeTimer = null;
 
-/* 기본 볼륨 50% */
-bgm.volume = 0.5;
+/* 목표 볼륨 */
+function getTargetVolume(){
+  return volumeSlider.value / 100;
+}
 
+/* 아이콘 상태 */
+function updateBgmButton(){
+  if(bgm.paused){
+    playIcon.style.display = "block";
+    pauseIcon.style.display = "none";
+  } else {
+    playIcon.style.display = "none";
+    pauseIcon.style.display = "block";
+  }
+}
+
+/* 페이드 */
+function fadeTo(target, duration = 600, onDone){
+  if (fadeTimer) clearInterval(fadeTimer);
+
+  const startVol = bgm.volume;
+  const diff = target - startVol;
+  const steps = Math.max(1, Math.floor(duration / 30));
+  let currentStep = 0;
+
+  fadeTimer = setInterval(()=>{
+    currentStep++;
+    const progress = currentStep / steps;
+    bgm.volume = startVol + diff * progress;
+
+    if (currentStep >= steps){
+      clearInterval(fadeTimer);
+      fadeTimer = null;
+      bgm.volume = target;
+      if (onDone) onDone();
+    }
+  }, 30);
+}
+
+/* 시작 */
 function startStory(){
   if(started) return;
   started = true;
@@ -198,7 +328,12 @@ function startStory(){
   intro.classList.add("fadeOut");
 
   bgm.muted = false;
-  bgm.play().catch(()=>{});
+  bgm.volume = 0;
+
+  bgm.play().then(()=>{
+    fadeTo(getTargetVolume(), 800);
+    updateBgmButton();
+  }).catch(()=>{});
 
   setTimeout(()=>{
     intro.style.display="none";
@@ -207,19 +342,44 @@ function startStory(){
   },500);
 }
 
-/* Enter 키로 시작 */
+/* Enter */
 document.addEventListener("keydown", e=>{
   if(e.key==="Enter") startStory();
 });
 
-/* 클릭으로도 시작 (모바일 대응) */
-pressBtn.addEventListener("click", startStory);
-intro.addEventListener("click", startStory);
+/* 클릭 */
+if(pressBtn) pressBtn.addEventListener("click", startStory);
+if(intro) intro.addEventListener("click", startStory);
 
-/* 볼륨 슬라이더 작동 */
-volumeSlider.addEventListener("input", function(){
-  bgm.volume = volumeSlider.value / 100;
+/* 볼륨 변경 */
+volumeSlider.addEventListener("input", ()=>{
+  if(!bgm.paused){
+    fadeTo(getTargetVolume(), 200);
+  }
 });
+
+/* 토글 */
+bgmToggle.addEventListener("click", ()=>{
+  if(!started){
+    startStory();
+    return;
+  }
+
+  if(bgm.paused){
+    bgm.volume = 0;
+    bgm.play().then(()=>{
+      fadeTo(getTargetVolume(), 500);
+      updateBgmButton();
+    });
+  } else {
+    fadeTo(0, 400, ()=>{
+      bgm.pause();
+      updateBgmButton();
+    });
+  }
+});
+
+updateBgmButton();
 </script>
 
 </body>
