@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>카르니스 연대기 - 창세 신화</title>
+<title>카르니스 연대기</title>
 
-<!-- 중세풍 폰트 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
@@ -22,8 +21,6 @@
   --gold: rgba(210,190,120,0.55);
 }
 
-html{ scroll-behavior: smooth; }
-
 body{
   margin:0;
   background: var(--bg);
@@ -32,7 +29,16 @@ body{
   overflow-x:hidden;
 }
 
-/* ✅ 상단 메뉴바 (인트로에서는 숨김, 본문에서 보여줌) */
+/* 배경 비네팅 */
+.vignette{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(1200px 900px at 50% 55%, transparent 45%, rgba(0,0,0,0.82) 100%);
+  z-index: 1;
+}
+
+/* 상단 메뉴바: 인트로에서는 숨김 */
 .topNav{
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -94,16 +100,6 @@ body{
   padding: 84px 24px 24px;
 }
 
-/* 배경 비네팅 */
-.vignette{
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(1200px 900px at 50% 55%, transparent 45%, rgba(0,0,0,0.82) 100%);
-  z-index: 1;
-}
-
 /* 인트로 */
 #intro{
   width:100%;
@@ -140,7 +136,7 @@ body{
   text-align: center;
   display:none;
   width:100%;
-  max-width:660px;
+  max-width:760px;
   border-radius:18px;
   padding:34px 26px;
 
@@ -158,7 +154,9 @@ body{
   transform:translateY(10px);
 }
 
-#mainContent.show{ animation:appear 800ms ease forwards; }
+#mainContent.show{
+  animation:appear 800ms ease forwards;
+}
 
 @keyframes appear{
   to{opacity:1; transform:translateY(0);}
@@ -182,51 +180,259 @@ h1{
   background: linear-gradient(90deg, transparent, rgba(210,190,120,0.45), transparent);
 }
 
-/* 신화 텍스트 */
-.myth{ text-align: center; margin-top: 18px; }
+/* ✅ “가짜 페이지” 섹션 처리 */
+.page{
+  display:none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.page.active{
+  display:block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 창세신화 문단 (너 취향대로 중앙 유지) */
 .myth p{
   line-height: 1.55;
-  margin: 0 0 6px;
+  margin: 0 0 8px;
   font-size: 16px;
-  letter-spacing: 0.2px;
   color: rgba(236,236,236,0.92);
 }
-.myth p.blockGap{ margin-top: 12px; }
 
-.myth p:first-child{
-  display: inline-block;
-  text-align: left;      /* 드롭캡 레이아웃 안정용 */
-  max-width: 560px;
-}
-.myth p:first-child::first-letter{
-  float: left;
-  font-family: "Cinzel", serif;
-  font-weight: 700;
-  font-size: 42px;
-  line-height: 0.95;
-  padding: 6px 10px 0 0;
-  color: rgba(210,190,120,0.75);
-  text-shadow: 0 0 14px rgba(210,190,120,0.10);
-}
-
-/* 붉은 강조 */
 .blood{
   color: var(--blood);
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-weight:700;
+  letter-spacing:1px;
   text-shadow: 0 0 10px rgba(122,17,17,0.25);
 }
-.myth p strong.blood{
-  display: inline-block;
-  padding: 6px 10px;
-  border-top: 1px solid rgba(210,190,120,0.18);
-  border-bottom: 1px solid rgba(210,190,120,0.18);
+
+.lead{
+  margin: 16px auto 18px;
+  max-width: 640px;
+  line-height: 1.65;
+  font-size: 16px;
+  color: rgba(236,236,236,0.92);
+  opacity: 0.95;
 }
 
-/* 페이드 */
-.fadeOut{ opacity:0; }
+/* 가문 카드 */
+.familyGrid{
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  text-align: left;
+}
 
-/* 오디오 컨트롤 */
+@media (min-width: 720px){
+  .familyGrid{ grid-template-columns: 1fr 1fr; }
+}
+
+.familyCard{
+  border: 1px solid rgba(210,190,120,0.18);
+  border-radius: 16px;
+  padding: 16px 16px 14px;
+  background: rgba(255,255,255,0.03);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.45) inset;
+}
+
+.familyCard h2{
+  margin: 0 0 10px;
+  font-family: "Cinzel", serif;
+  letter-spacing: 2px;
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(236,236,236,0.95);
+  text-align: center;
+}
+
+.familyCard p{
+  margin: 0 0 8px;
+  line-height: 1.6;
+  font-size: 15px;
+  color: rgba(236,236,236,0.90);
+}
+
+.tagRow{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.tag{
+  font-family: "Cinzel", serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.03);
+  color: rgba(236,236,236,0.85);
+}
+
+.fadeOut{ opacity:0; }
+</style>
+</head>
+
+<body>
+
+<nav class="topNav" id="topNav">
+  <a href="#" data-page="myth" class="active">창세 신화</a>
+  <a href="#" data-page="families">가문</a>
+  <a href="#" data-page="regions">지역</a>
+  <a href="#" data-page="map">전체 지도</a>
+</nav>
+
+<div class="vignette"></div>
+
+<div class="stage">
+
+  <section id="intro">
+    <h2>태초의 신이 먹힌 밤</h2>
+    <div class="press" id="pressBtn">PRESS ENTER</div>
+  </section>
+
+  <section id="mainContent">
+    <!-- ✅ 1) 창세 신화 -->
+    <div class="page active" id="page-myth">
+      <h1>창세 신화</h1>
+      <div class="myth">
+        <p>태초에 하나의 신이 세계를 창조하고, 그 위에 군림했다.</p>
+        <p>신은 동시에 여러 피조물을 만들어 자신이 만든 땅을 돌보게 했다.</p>
+
+        <p>그러나 시간이 흐르며 피조물들 사이에는 불만이 싹트기 시작했다.</p>
+        <p>그리고 어느 날, 한 피조물의 선동에 의해 그들은 잠든 신을 덮쳤다.</p>
+        <p>피조물들은 신의 육신을 다섯 조각으로 나누어, 그것을 먹었다.</p>
+
+        <p><strong class="blood">눈, 혀, 심장, 뼈, 그리고 피.</strong></p>
+
+        <p>신을 집어삼킨 순간, 그들은 절대적인 권능을 하나씩 계승했다.</p>
+        <p>눈을 먹은 자는 미래를 꿰뚫어보는 예지력을 얻었고,</p>
+        <p>혀를 먹은 자는 세계를 굴복시키는 언령을 손에 넣었다.</p>
+        <p>심장을 먹은 자는 죽지 않는 생명을,</p>
+        <p>뼈를 먹은 자는 파괴되지 않는 육신을,</p>
+        <p>피를 마신 자는 절대적인 혈맹의 권능을 얻었다.</p>
+
+        <p>한낱 피조물에 불과하던 그들은 이제 신의 힘을 행사하는 존재가 되었고,</p>
+        <p>스스로를 ‘신식자(神食者)’라 칭하며</p>
+        <p>신이 창조한 세계를 나누어 통치하기 시작했다.</p>
+
+        <p>그러나 그들은 미처 깨닫지 못했다.</p>
+        <p>신이 먹힌 그 자리에 남아 있던 것,</p>
+        <p>‘그림자’의 존재를.</p>
+
+        <p>그 그림자를 훔쳐 달아난 또 다른 피조물이 있었다.</p>
+        <p>그는 신식자들의 지배가 미치지 않는 세계의 경계로 숨어들어,</p>
+        <p>잊힌 신의 부활을 준비하기 시작했다.</p>
+      </div>
+    </div>
+
+    <!-- ✅ 2) 가문 -->
+    <div class="page" id="page-families">
+      <h1>가문</h1>
+      <p class="lead">
+        신의 육신을 나눠 삼킨 다섯 혈통은 서로 다른 권능과 금기를 물려받았다.
+        각 가문은 영토의 기후와 질서에 맞춰 스스로를 다듬었고,
+        그 과정에서 같은 이름의 힘은 서로 다른 형태로 변질되었다.
+      </p>
+
+      <div class="familyGrid">
+        <article class="familyCard">
+          <h2>눈의 일족</h2>
+          <p>예지와 계시를 다룬다. 태어나는 자는 모두 <span class="blood">실명</span>으로 시작한다.</p>
+          <p>대신 ‘미래를 보는 눈’은 혈통 속에 남아, 선택과 대가를 요구한다.</p>
+          <div class="tagRow">
+            <span class="tag">권능: 예지</span>
+            <span class="tag">금기: 시선</span>
+            <span class="tag">영토: 북부 산맥</span>
+          </div>
+        </article>
+
+        <article class="familyCard">
+          <h2>혀의 일족</h2>
+          <p>말과 서약이 곧 법이 된다. 언령은 현실을 구부리지만, 거짓은 피를 부른다.</p>
+          <p>그들의 목소리는 축복이자 무기다.</p>
+          <div class="tagRow">
+            <span class="tag">권능: 언령</span>
+            <span class="tag">금기: 거짓</span>
+            <span class="tag">영토: 남부 평야</span>
+          </div>
+        </article>
+
+        <article class="familyCard">
+          <h2>심장의 일족</h2>
+          <p>죽지 않는 생명과 회복을 다룬다. 하지만 불사에는 ‘끝나지 않는 대가’가 따른다.</p>
+          <p>그들의 피는 맥박처럼 질서를 강요한다.</p>
+          <div class="tagRow">
+            <span class="tag">권능: 불사</span>
+            <span class="tag">금기: 안식</span>
+            <span class="tag">영토: 중앙 요충지</span>
+          </div>
+        </article>
+
+        <article class="familyCard">
+          <h2>뼈의 일족</h2>
+          <p>파괴되지 않는 육신을 좇는다. 전투와 시험을 신앙처럼 여긴다.</p>
+          <p>강인함은 미덕이지만, 지나치면 인간성을 깎아낸다.</p>
+          <div class="tagRow">
+            <span class="tag">권능: 강체</span>
+            <span class="tag">금기: 연약</span>
+            <span class="tag">영토: 동부 불모지</span>
+          </div>
+        </article>
+
+        <article class="familyCard">
+          <h2>피의 일족</h2>
+          <p>혈맹과 귀속의 힘을 다룬다. 맹세는 생존을 보장하지만, 자유를 거둔다.</p>
+          <p>그들의 계약은 달콤하고 잔혹하다.</p>
+          <div class="tagRow">
+            <span class="tag">권능: 혈맹</span>
+            <span class="tag">금기: 배반</span>
+            <span class="tag">영토: 서부 음지</span>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- ✅ 3) 지역 (자리만) -->
+    <div class="page" id="page-regions">
+      <h1>지역</h1>
+      <p class="lead">여기에 지역 페이지 내용을 넣으면 돼.</p>
+    </div>
+
+    <!-- ✅ 4) 전체 지도 (자리만) -->
+    <div class="page" id="page-map">
+      <h1>전체 지도</h1>
+      <p class="lead">여기에 지도 이미지나 텍스트 지도를 넣으면 돼.</p>
+    </div>
+
+  </section>
+</div>
+
+<!-- 🎵 BGM -->
+<audio id="bgm" autoplay loop muted>
+  <source src="bgm.mp3" type="audio/mpeg">
+</audio>
+
+<div id="audioControl">
+  <button id="bgmToggle" aria-label="BGM Toggle">
+    <svg id="playIcon" viewBox="0 0 24 24">
+      <polygon points="8,5 19,12 8,19"></polygon>
+    </svg>
+    <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
+      <rect x="6" y="5" width="4" height="14"></rect>
+      <rect x="14" y="5" width="4" height="14"></rect>
+    </svg>
+  </button>
+  <input type="range" id="volumeSlider" min="0" max="100" value="50">
+</div>
+
+<style>
 #audioControl{
   position: fixed;
   bottom: 20px;
@@ -302,84 +508,12 @@ h1{
   transform: scale(1.1);
 }
 </style>
-</head>
-
-<body>
-
-<!-- ✅ 메뉴: 이제 “다른 페이지”로 이동 -->
-<nav class="topNav" id="topNav">
-  <a href="index.html" class="active">창세 신화</a>
-  <a href="families.html">가문</a>
-  <a href="regions.html">지역</a>
-  <a href="map.html">전체 지도</a>
-</nav>
-
-<div class="vignette"></div>
-
-<div class="stage">
-  <section id="intro">
-    <h2>태초의 신이 먹힌 밤</h2>
-    <div class="press" id="pressBtn">PRESS ENTER</div>
-  </section>
-
-  <section id="mainContent">
-    <h1>창세 신화</h1>
-
-    <div class="myth">
-      <p>태초에 하나의 신이 세계를 창조하고, 그 위에 군림했다.</p>
-      <p>신은 동시에 여러 피조물을 만들어 자신이 만든 땅을 돌보게 했다.</p>
-
-      <p class="blockGap">그러나 시간이 흐르며 피조물들 사이에는 불만이 싹트기 시작했다.</p>
-      <p>그리고 어느 날, 한 피조물의 선동에 의해 그들은 잠든 신을 덮쳤다.</p>
-      <p>피조물들은 신의 육신을 다섯 조각으로 나누어, 그것을 먹었다.</p>
-
-      <p class="blockGap"><strong class="blood">눈, 혀, 심장, 뼈, 그리고 피.</strong></p>
-
-      <p class="blockGap">신을 집어삼킨 순간, 그들은 절대적인 권능을 하나씩 계승했다.</p>
-      <p>눈을 먹은 자는 미래를 꿰뚫어보는 예지력을 얻었고,</p>
-      <p>혀를 먹은 자는 세계를 굴복시키는 언령을 손에 넣었다.</p>
-      <p>심장을 먹은 자는 죽지 않는 생명을,</p>
-      <p>뼈를 먹은 자는 파괴되지 않는 육신을,</p>
-      <p>피를 마신 자는 절대적인 혈맹의 권능을 얻었다.</p>
-
-      <p class="blockGap">한낱 피조물에 불과하던 그들은 이제 신의 힘을 행사하는 존재가 되었고,</p>
-      <p>스스로를 ‘신식자(神食者)’라 칭하며</p>
-      <p>신이 창조한 세계를 나누어 통치하기 시작했다.</p>
-
-      <p class="blockGap">그러나 그들은 미처 깨닫지 못했다.</p>
-      <p>신이 먹힌 그 자리에 남아 있던 것,</p>
-      <p>‘그림자’의 존재를.</p>
-
-      <p class="blockGap">그 그림자를 훔쳐 달아난 또 다른 피조물이 있었다.</p>
-      <p>그는 신식자들의 지배가 미치지 않는 세계의 경계로 숨어들어,</p>
-      <p>잊힌 신의 부활을 준비하기 시작했다.</p>
-    </div>
-  </section>
-</div>
-
-<!-- 🎵 BGM -->
-<audio id="bgm" autoplay loop muted>
-  <source src="bgm.mp3" type="audio/mpeg">
-</audio>
-
-<div id="audioControl">
-  <button id="bgmToggle" aria-label="BGM Toggle">
-    <svg id="playIcon" viewBox="0 0 24 24">
-      <polygon points="8,5 19,12 8,19"></polygon>
-    </svg>
-    <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none;">
-      <rect x="6" y="5" width="4" height="14"></rect>
-      <rect x="14" y="5" width="4" height="14"></rect>
-    </svg>
-  </button>
-
-  <input type="range" id="volumeSlider" min="0" max="100" value="50">
-</div>
 
 <script>
 const intro = document.getElementById("intro");
 const mainContent = document.getElementById("mainContent");
 const pressBtn = document.getElementById("pressBtn");
+
 const bgm = document.getElementById("bgm");
 const volumeSlider = document.getElementById("volumeSlider");
 const bgmToggle = document.getElementById("bgmToggle");
@@ -387,13 +521,28 @@ const bgmToggle = document.getElementById("bgmToggle");
 const playIcon = document.getElementById("playIcon");
 const pauseIcon = document.getElementById("pauseIcon");
 
-/* ✅ 메뉴(인트로에서는 숨김 → 본문에서 보여줌) */
 const topNav = document.getElementById("topNav");
+const navLinks = topNav.querySelectorAll("a[data-page]");
 
 let started = false;
 let fadeTimer = null;
 
-function getTargetVolume(){ return volumeSlider.value / 100; }
+/* 페이지(섹션) 전환 */
+function showPage(key){
+  const pages = document.querySelectorAll(".page");
+  pages.forEach(p => p.classList.remove("active"));
+
+  const target = document.getElementById("page-" + key);
+  if (target) target.classList.add("active");
+
+  navLinks.forEach(a => a.classList.toggle("active", a.dataset.page === key));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+/* 오디오 */
+function getTargetVolume(){
+  return volumeSlider.value / 100;
+}
 
 function updateBgmButton(){
   if(bgm.paused){
@@ -427,6 +576,7 @@ function fadeTo(target, duration = 600, onDone){
   }, 30);
 }
 
+/* 시작 */
 function startStory(){
   if(started) return;
   started = true;
@@ -445,25 +595,42 @@ function startStory(){
     intro.style.display="none";
     mainContent.style.display="block";
     mainContent.classList.add("show");
-
-    /* ✅ 본문 들어가면 메뉴 표시 */
     topNav.classList.add("show");
   },500);
 }
 
+/* Enter */
 document.addEventListener("keydown", e=>{
   if(e.key==="Enter") startStory();
 });
 
+/* 클릭 */
 if(pressBtn) pressBtn.addEventListener("click", startStory);
 if(intro) intro.addEventListener("click", startStory);
 
+/* 메뉴 클릭 */
+navLinks.forEach(a=>{
+  a.addEventListener("click", (e)=>{
+    e.preventDefault();
+    const key = a.dataset.page;
+    if (!started){
+      // 인트로 상태에서 메뉴 누르면 시작부터 시키고 이동
+      startStory();
+      setTimeout(()=> showPage(key), 600);
+      return;
+    }
+    showPage(key);
+  });
+});
+
+/* 볼륨 */
 volumeSlider.addEventListener("input", ()=>{
   if(!bgm.paused){
     fadeTo(getTargetVolume(), 200);
   }
 });
 
+/* 토글 */
 bgmToggle.addEventListener("click", ()=>{
   if(!started){
     startStory();
