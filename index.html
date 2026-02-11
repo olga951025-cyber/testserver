@@ -1,184 +1,215 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>카르니스 ─ 창세 신화</title>
 
 <style>
-  body{
-    margin:0;
-    background:#0b0b0c;
-    color:#eee;
-    font-family: "Georgia", serif;
-    line-height:1.9;
-  }
+:root{
+  --bg:#070708;
+  --text:#ececec;
+  --muted:#c9c9cf;
+  --line:rgba(255,255,255,0.14);
+  --glow:rgba(210,210,255,0.18);
+}
 
-  .wrap{
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 48px 20px 72px;
-  }
+*{ box-sizing:border-box; }
 
-  .hero{
-    padding: 34px 22px;
-    border: 1px solid #2a2a2f;
-    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0));
-  }
+body{
+  margin:0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Georgia, "Times New Roman", serif;
+  overflow-x:hidden;
+}
 
-  .kicker{
-    letter-spacing: 3px;
-    color:#c9c9cf;
-    font-size: 12px;
-    margin: 0 0 10px 0;
-    text-transform: uppercase;
-  }
+/* 배경 효과 */
+.vignette{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1200px 700px at 50% 35%, rgba(255,255,255,0.06), transparent 60%),
+    radial-gradient(1200px 900px at 50% 55%, transparent 45%, rgba(0,0,0,0.78) 100%);
+  z-index: 1;
+}
 
-  h1{
-    margin: 0 0 8px 0;
-    font-size: 28px;
-    letter-spacing: 1px;
-  }
+.stage{
+  position: relative;
+  z-index: 3;
+  min-height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
 
-  .subtitle{
-    margin: 0;
-    color:#c9c9cf;
-    font-size: 14px;
-  }
+/* 인트로 */
+#intro{
+  width:100%;
+  max-width:860px;
+  text-align:center;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:44px 22px;
+  background:rgba(255,255,255,0.05);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
 
-  .divider{
-    height: 1px;
-    background: #2a2a2f;
-    margin: 26px 0 24px;
-  }
+.sigil{
+  width:74px;
+  height:74px;
+  margin:0 auto 18px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,0.2);
+  box-shadow:0 0 50px var(--glow);
+  animation:breathe 3s ease-in-out infinite;
+}
 
-  .myth{
-    padding: 18px 18px;
-    border: 1px solid #232329;
-    background: rgba(255,255,255,0.03);
-  }
+@keyframes breathe{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.05);}
+}
 
-  .myth p{
-    margin: 0 0 14px 0;
-  }
+.press{
+  margin-top:24px;
+  display:inline-block;
+  padding:10px 16px;
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:10px;
+  letter-spacing:3px;
+  cursor:pointer;
+  animation:blink 1.8s ease-in-out infinite;
+}
 
-  .myth p:last-child{
-    margin-bottom: 0;
-  }
+@keyframes blink{
+  0%,100%{opacity:1;}
+  50%{opacity:0.4;}
+}
 
-  .chant{
-    margin: 18px 0 0 0;
-    padding: 14px 14px;
-    border-left: 3px solid #6d6d78;
-    color:#d8d8de;
-    background: rgba(0,0,0,0.25);
-  }
+/* 본문 */
+#mainContent{
+  display:none;
+  width:100%;
+  max-width:860px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:34px 22px;
+  background:rgba(10,10,12,0.7);
+  opacity:0;
+  transform:translateY(10px);
+}
 
-  .list{
-    margin: 10px 0 0 0;
-    padding-left: 18px;
-    color:#d1d1d6;
-  }
+#mainContent.show{
+  animation:appear 900ms ease forwards;
+}
 
-  .list li{
-    margin: 6px 0;
-  }
+@keyframes appear{
+  to{opacity:1; transform:translateY(0);}
+}
 
-  /* BGM 버튼 */
-  #bgmBtn{
-    position: fixed;
-    right: 18px;
-    bottom: 18px;
-    padding: 10px 14px;
-    border: 1px solid #2a2a2f;
-    border-radius: 10px;
-    background: rgba(0,0,0,0.55);
-    color: #eee;
-    cursor: pointer;
-    font-size: 13px;
-  }
-  #bgmBtn:hover{
-    background: rgba(255,255,255,0.06);
-  }
+h1{
+  text-align:center;
+  margin-bottom:20px;
+}
 
-  /* 작은 안내 */
-  .hint{
-    margin-top: 14px;
-    font-size: 12px;
-    color:#bdbdc4;
-  }
+.myth p{
+  line-height:1.9;
+  margin-bottom:14px;
+}
+
+.fadeOut{
+  opacity:0;
+  transform:translateY(-8px);
+}
 </style>
 </head>
 
 <body>
-  <div class="wrap">
-    <section class="hero">
-      <p class="kicker">CARNIS · CREATION MYTH</p>
-      <h1>창세 신화</h1>
-      <p class="subtitle">태초의 신, 다섯 조각, 그리고 남겨진 그림자.</p>
 
-      <div class="divider"></div>
+<div class="vignette"></div>
 
-      <div class="myth">
-        <p>태초에 하나의 신이 세계를 창조하고, 그 위에 군림했다.<br>
-        신은 동시에 여러 피조물을 만들어 자신이 만든 땅을 돌보게 했다.</p>
+<div class="stage">
 
-        <p>그러나 시간이 흐르며 피조물들 사이에는 불만이 싹트기 시작했다.<br>
-        그리고 어느 날, 한 피조물의 선동에 의해 그들은 잠든 신을 덮쳤다.<br>
-        피조물들은 신의 육신을 다섯 조각으로 나누어, 그것을 먹었다.</p>
+<section id="intro">
+  <div class="sigil"></div>
+  <h2>태초의 신이 먹힌 밤</h2>
+  <div class="press" id="pressBtn">PRESS ENTER</div>
+</section>
 
-        <div class="chant">
-          눈, 혀, 심장, 뼈, 그리고 피.
-        </div>
+<section id="mainContent">
+  <h1>창세 신화</h1>
 
-        <p>신을 집어삼킨 순간, 그들은 절대적인 권능을 하나씩 계승했다.</p>
+  <div class="myth">
+    <p>태초에 하나의 신이 세계를 창조하고, 그 위에 군림했다.
+    신은 동시에 여러 피조물을 만들어 자신이 만든 땅을 돌보게 했다.</p>
 
-        <ul class="list">
-          <li>눈을 먹은 자는 미래를 꿰뚫어보는 예지력을 얻었고,</li>
-          <li>혀를 먹은 자는 세계를 굴복시키는 언령을 손에 넣었다.</li>
-          <li>심장을 먹은 자는 죽지 않는 생명을,</li>
-          <li>뼈를 먹은 자는 파괴되지 않는 육신을,</li>
-          <li>피를 마신 자는 절대적인 혈맹의 권능을 얻었다.</li>
-        </ul>
+    <p>그러나 시간이 흐르며 피조물들 사이에는 불만이 싹트기 시작했다.
+    그리고 어느 날, 한 피조물의 선동에 의해 그들은 잠든 신을 덮쳤다.
+    피조물들은 신의 육신을 다섯 조각으로 나누어, 그것을 먹었다.</p>
 
-        <p>한낱 피조물에 불과하던 그들은 이제 신의 힘을 행사하는 존재가 되었고,<br>
-        스스로를 ‘신식자(神食者)’라 칭하며 신이 창조한 세계를 나누어 통치하기 시작했다.</p>
+    <p><strong>눈, 혀, 심장, 뼈, 그리고 피.</strong></p>
 
-        <p>그러나 그들은 미처 깨닫지 못했다.<br>
-        신이 먹힌 그 자리에 남아 있던 것, ‘그림자’의 존재를.</p>
+    <p>신을 집어삼킨 순간, 그들은 절대적인 권능을 하나씩 계승했다.
+    눈을 먹은 자는 미래를 꿰뚫어보는 예지력을 얻었고,
+    혀를 먹은 자는 세계를 굴복시키는 언령을 손에 넣었다.
+    심장을 먹은 자는 죽지 않는 생명을,
+    뼈를 먹은 자는 파괴되지 않는 육신을,
+    피를 마신 자는 절대적인 혈맹의 권능을 얻었다.</p>
 
-        <p>그 그림자를 훔쳐 달아난 또 다른 피조물이 있었다.<br>
-        그는 신식자들의 지배가 미치지 않는 세계의 경계로 숨어들어,<br>
-        잊힌 신의 부활을 준비하기 시작했다.</p>
+    <p>한낱 피조물에 불과하던 그들은 이제 신의 힘을 행사하는 존재가 되었고,
+    스스로를 ‘신식자(神食者)’라 칭하며
+    신이 창조한 세계를 나누어 통치하기 시작했다.</p>
 
-      </div>
-    </section>
+    <p>그러나 그들은 미처 깨닫지 못했다.
+    신이 먹힌 그 자리에 남아 있던 것,
+    ‘그림자’의 존재를.</p>
+
+    <p>그 그림자를 훔쳐 달아난 또 다른 피조물이 있었다.
+    그는 신식자들의 지배가 미치지 않는 세계의 경계로 숨어들어,
+    잊힌 신의 부활을 준비하기 시작했다.</p>
   </div>
+</section>
 
-  <!-- BGM -->
-  <audio id="bgm" loop>
-    <source src="main.mp3" type="audio/mpeg">
-  </audio>
+</div>
 
-  <button id="bgmBtn" onclick="toggleBgm()">🎵 BGM 켜기</button>
+<!-- 🎵 BGM (파일명 변경 완료) -->
+<audio id="bgm" autoplay loop muted>
+  <source src="bgm.mp3" type="audio/mpeg">
+</audio>
 
-  <script>
-    let playing = false;
+<script>
+const intro = document.getElementById("intro");
+const mainContent = document.getElementById("mainContent");
+const pressBtn = document.getElementById("pressBtn");
+const bgm = document.getElementById("bgm");
 
-    function toggleBgm(){
-      const bgm = document.getElementById("bgm");
-      const btn = document.getElementById("bgmBtn");
+let started = false;
 
-      if(!playing){
-        bgm.play();
-        btn.textContent = "🔇 BGM 끄기";
-        playing = true;
-      }else{
-        bgm.pause();
-        btn.textContent = "🎵 BGM 켜기";
-        playing = false;
-      }
-    }
-  </script>
+function startStory(){
+  if(started) return;
+  started = true;
+
+  intro.classList.add("fadeOut");
+
+  bgm.muted = false;
+  bgm.play().catch(()=>{});
+
+  setTimeout(()=>{
+    intro.style.display="none";
+    mainContent.style.display="block";
+    mainContent.classList.add("show");
+  },600);
+}
+
+document.addEventListener("keydown", e=>{
+  if(e.key==="Enter") startStory();
+});
+
+pressBtn.addEventListener("click", startStory);
+intro.addEventListener("click", startStory);
+</script>
+
 </body>
 </html>
