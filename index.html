@@ -651,8 +651,10 @@ h1{
 
 .modalDialog{
   width: min(920px, 100%);
-  max-height: min(86vh, 860px);
-  overflow: hidden;
+  max-height: 86vh;          
+  display: flex;              
+  flex-direction: column;
+  overflow: hidden;            
 
   border-radius: 18px;
   border: 1px solid rgba(210,190,120,0.20);
@@ -665,6 +667,7 @@ h1{
     linear-gradient(180deg, rgba(255,255,255,0.05), transparent 42%),
     rgba(12,12,14,0.94);
 }
+
 
 .modalHeader{
   display: flex;
@@ -705,8 +708,9 @@ h1{
 
 .modalBody{
   padding: 14px 14px 18px;
-  overflow: auto;
-  max-height: calc(86vh - 58px);
+  overflow-y: auto;  
+  overflow-x: hidden;
+  flex: 1;          
 }
 
 .modalLead{
