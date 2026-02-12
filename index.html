@@ -333,6 +333,7 @@ h1{
 
 /* =========================
    ✅ 지역 섹션: 플립 카드 + 내부 아코디언
+   (수정: 바깥이 button이 아니라 div role=button)
    ========================= */
 .regionGrid{
   margin-top: 18px;
@@ -352,7 +353,7 @@ h1{
   perspective: 1200px;
 }
 
-/* 플립 버튼(전체 카드) */
+/* ✅ 지역 카드(이제 div) */
 .regionCard{
   width: 100%;
   border: 0;
@@ -360,6 +361,7 @@ h1{
   background: transparent;
   text-align: left;
   cursor: pointer;
+  user-select: none;
 }
 
 /* 포커스 링 */
@@ -376,13 +378,12 @@ h1{
   overflow: hidden;
   background: rgba(255,255,255,0.03);
   box-shadow: 0 0 0 1px rgba(0,0,0,0.45) inset;
-  transition: transform 180ms ease, border-color 180ms ease;
-
+  transition: border-color 180ms ease; /* ✅ transform hover 제거 */
   transform-style: preserve-3d;
 }
 
+/* hover 시에는 테두리만 */
 .regionCard:hover .regionInner{
-  transform: translateY(-2px);
   border-color: rgba(210,190,120,0.35);
 }
 
@@ -632,7 +633,6 @@ h1{
 @media (prefers-reduced-motion: reduce){
   .regionInner,
   .regionThumb img,
-  .regionCard:hover .regionInner,
   .regionCard.is-flipped .regionInner{
     transition: none !important;
   }
@@ -765,7 +765,7 @@ h1{
       </div>
     </div>
 
-    <!-- ✅ 3) 지역 (플립 카드 + 내부 아코디언) -->
+    <!-- ✅ 3) 지역 -->
     <div class="page" id="page-regions">
       <h1>지역</h1>
       <p class="lead">카드를 누르면 기록이 펼쳐진다. 뒤쪽에서 항목을 선택하면 상세가 확장된다.</p>
@@ -774,9 +774,8 @@ h1{
 
         <!-- 북부 -->
         <div class="regionFlip regionCard--wide">
-          <button class="regionCard" type="button" data-region="north" aria-expanded="false" aria-label="북부 아르케인 산맥 기록 열기">
+          <div class="regionCard" role="button" tabindex="0" data-region="north" aria-expanded="false" aria-label="북부 아르케인 산맥 기록 열기">
             <div class="regionInner">
-              <!-- FRONT -->
               <div class="regionFace regionFront">
                 <div class="hintBadge"><span class="hintDot"></span>CLICK TO OPEN</div>
                 <div class="regionThumb">
@@ -786,7 +785,6 @@ h1{
                 <p>대륙 최북단 만년설 산맥.</p>
               </div>
 
-              <!-- BACK -->
               <div class="regionFace regionBack">
                 <div class="backWrap">
                   <div class="backTop">
@@ -825,14 +823,13 @@ h1{
                 </div>
               </div>
             </div>
-          </button>
+          </div>
         </div>
 
         <!-- 남부 -->
         <div class="regionFlip">
-          <button class="regionCard" type="button" data-region="south" aria-expanded="false" aria-label="남부 레티아 기록 열기">
+          <div class="regionCard" role="button" tabindex="0" data-region="south" aria-expanded="false" aria-label="남부 레티아 기록 열기">
             <div class="regionInner">
-              <!-- FRONT -->
               <div class="regionFace regionFront">
                 <div class="hintBadge"><span class="hintDot"></span>CLICK TO OPEN</div>
                 <div class="regionThumb">
@@ -842,7 +839,6 @@ h1{
                 <p>카르니스 최대 항구이자 학술 도시</p>
               </div>
 
-              <!-- BACK -->
               <div class="regionFace regionBack">
                 <div class="backWrap">
                   <div class="backTop">
@@ -880,14 +876,13 @@ h1{
                 </div>
               </div>
             </div>
-          </button>
+          </div>
         </div>
 
         <!-- 동부 -->
         <div class="regionFlip">
-          <button class="regionCard" type="button" data-region="east" aria-expanded="false" aria-label="동부 기록 열기">
+          <div class="regionCard" role="button" tabindex="0" data-region="east" aria-expanded="false" aria-label="동부 기록 열기">
             <div class="regionInner">
-              <!-- FRONT -->
               <div class="regionFace regionFront">
                 <div class="hintBadge"><span class="hintDot"></span>CLICK TO OPEN</div>
                 <div class="regionThumb">
@@ -897,7 +892,6 @@ h1{
                 <p>메마른 황야와 협곡 고개 요새</p>
               </div>
 
-              <!-- BACK -->
               <div class="regionFace regionBack">
                 <div class="backWrap">
                   <div class="backTop">
@@ -935,14 +929,13 @@ h1{
                 </div>
               </div>
             </div>
-          </button>
+          </div>
         </div>
 
         <!-- 서부 -->
         <div class="regionFlip">
-          <button class="regionCard" type="button" data-region="west" aria-expanded="false" aria-label="서부 실렌하임 영지 기록 열기">
+          <div class="regionCard" role="button" tabindex="0" data-region="west" aria-expanded="false" aria-label="서부 실렌하임 영지 기록 열기">
             <div class="regionInner">
-              <!-- FRONT -->
               <div class="regionFace regionFront">
                 <div class="hintBadge"><span class="hintDot"></span>CLICK TO OPEN</div>
                 <div class="regionThumb">
@@ -952,7 +945,6 @@ h1{
                 <p>빛이 들지 않는 혈맹의 땅</p>
               </div>
 
-              <!-- BACK -->
               <div class="regionFace regionBack">
                 <div class="backWrap">
                   <div class="backTop">
@@ -989,14 +981,13 @@ h1{
                 </div>
               </div>
             </div>
-          </button>
+          </div>
         </div>
 
         <!-- 중앙 -->
         <div class="regionFlip regionCard--wide">
-          <button class="regionCard" type="button" data-region="central" aria-expanded="false" aria-label="중앙 에스테라 기록 열기">
+          <div class="regionCard" role="button" tabindex="0" data-region="central" aria-expanded="false" aria-label="중앙 에스테라 기록 열기">
             <div class="regionInner">
-              <!-- FRONT -->
               <div class="regionFace regionFront">
                 <div class="hintBadge"><span class="hintDot"></span>CLICK TO OPEN</div>
                 <div class="regionThumb">
@@ -1006,7 +997,6 @@ h1{
                 <p>사치와 향락의 도시</p>
               </div>
 
-              <!-- BACK -->
               <div class="regionFace regionBack">
                 <div class="backWrap">
                   <div class="backTop">
@@ -1051,7 +1041,7 @@ h1{
                 </div>
               </div>
             </div>
-          </button>
+          </div>
         </div>
 
       </div>
@@ -1303,59 +1293,54 @@ bgmToggle.addEventListener("click", ()=>{
 });
 
 /* =========================
-   ✅ 지역: 플립(한 번에 하나) + 내부 아코디언(2개)
-   - 카드 클릭/Enter/Space: 플립
-   - 뒤로 버튼: 원복
-   - ESC: 열려있는 카드 원복
-   - 키워드 버튼: 아코디언 토글(한 번에 하나)
+   ✅ 지역: 플립 + 아코디언
    ========================= */
 const regionGrid = document.getElementById("regionGrid");
 
-function closeAllFlips(exceptBtn = null){
+function closeAllFlips(exceptCard = null){
   const cards = regionGrid ? regionGrid.querySelectorAll(".regionCard") : [];
-  cards.forEach(btn=>{
-    if(exceptBtn && btn === exceptBtn) return;
-    btn.classList.remove("is-flipped");
-    btn.setAttribute("aria-expanded","false");
-    resetAccordion(btn);
+  cards.forEach(card=>{
+    if(exceptCard && card === exceptCard) return;
+    card.classList.remove("is-flipped");
+    card.setAttribute("aria-expanded","false");
+    resetAccordion(card);
   });
 }
 
-function resetAccordion(cardBtn){
-  const kwBtns = cardBtn.querySelectorAll(".kwBtn");
-  const panels = cardBtn.querySelectorAll(".accPanel");
+function resetAccordion(card){
+  const kwBtns = card.querySelectorAll(".kwBtn");
+  const panels = card.querySelectorAll(".accPanel");
   kwBtns.forEach(b=> b.setAttribute("aria-expanded","false"));
   panels.forEach(p=> p.classList.remove("active"));
 }
 
-function flipCard(cardBtn){
-  const isOn = cardBtn.classList.contains("is-flipped");
+function flipCard(card){
+  const isOn = card.classList.contains("is-flipped");
   if(isOn){
-    cardBtn.classList.remove("is-flipped");
-    cardBtn.setAttribute("aria-expanded","false");
-    resetAccordion(cardBtn);
+    card.classList.remove("is-flipped");
+    card.setAttribute("aria-expanded","false");
+    resetAccordion(card);
   } else {
-    closeAllFlips(cardBtn);
-    cardBtn.classList.add("is-flipped");
-    cardBtn.setAttribute("aria-expanded","true");
+    closeAllFlips(card);
+    card.classList.add("is-flipped");
+    card.setAttribute("aria-expanded","true");
   }
 }
 
-function toggleAccordion(cardBtn, targetId){
-  const kwBtns = cardBtn.querySelectorAll(".kwBtn");
-  const panels = cardBtn.querySelectorAll(".accPanel");
-  const targetPanel = cardBtn.querySelector("#" + CSS.escape(targetId));
+function toggleAccordion(card, targetId){
+  const kwBtns = card.querySelectorAll(".kwBtn");
+  const panels = card.querySelectorAll(".accPanel");
+  const targetPanel = card.querySelector("#" + CSS.escape(targetId));
   if(!targetPanel) return;
 
   const isActive = targetPanel.classList.contains("active");
 
-  // 한 번에 하나만
   kwBtns.forEach(b=> b.setAttribute("aria-expanded","false"));
   panels.forEach(p=> p.classList.remove("active"));
 
   if(!isActive){
     targetPanel.classList.add("active");
-    const ownerBtn = cardBtn.querySelector(`.kwBtn[data-item="${CSS.escape(targetId)}"]`);
+    const ownerBtn = card.querySelector(`.kwBtn[data-item="${CSS.escape(targetId)}"]`);
     if(ownerBtn) ownerBtn.setAttribute("aria-expanded","true");
   }
 }
@@ -1365,48 +1350,44 @@ if(regionGrid){
     const backBtn = e.target.closest('button[data-action="flipBack"]');
     if(backBtn){
       e.stopPropagation();
-      const cardBtn = e.target.closest(".regionCard");
-      if(cardBtn) flipCard(cardBtn);
+      const card = e.target.closest(".regionCard");
+      if(card) flipCard(card);
       return;
     }
 
     const kw = e.target.closest(".kwBtn");
     if(kw){
       e.stopPropagation();
-      const cardBtn = e.target.closest(".regionCard");
-      if(!cardBtn) return;
-      const id = kw.dataset.item;
-      toggleAccordion(cardBtn, id);
+      const card = e.target.closest(".regionCard");
+      if(!card) return;
+      toggleAccordion(card, kw.dataset.item);
       return;
     }
 
-    const cardBtn = e.target.closest(".regionCard");
-    if(cardBtn){
-      flipCard(cardBtn);
+    const card = e.target.closest(".regionCard");
+    if(card){
+      flipCard(card);
     }
   });
 
   regionGrid.addEventListener("keydown", (e)=>{
-    const cardBtn = e.target.closest(".regionCard");
-    if(!cardBtn) return;
+    const card = e.target.closest(".regionCard");
+    if(!card) return;
 
-    // ESC: 현재 카드 닫기
     if(e.key === "Escape"){
       e.preventDefault();
       closeAllFlips(null);
       return;
     }
 
-    // Enter/Space: 카드 플립 (키워드 버튼 위에서는 버튼 기본 동작)
-    const isKw = e.target.classList && (e.target.classList.contains("kwBtn") || e.target.classList.contains("backBtn"));
-    if(!isKw && (e.key === "Enter" || e.key === " ")){
+    const isInnerBtn = e.target.classList && (e.target.classList.contains("kwBtn") || e.target.classList.contains("backBtn"));
+    if(!isInnerBtn && (e.key === "Enter" || e.key === " ")){
       e.preventDefault();
-      flipCard(cardBtn);
+      flipCard(card);
     }
   });
 }
 
-// 전역 ESC: 어떤 카드든 닫기
 document.addEventListener("keydown", (e)=>{
   if(e.key === "Escape"){
     closeAllFlips(null);
