@@ -274,12 +274,14 @@ h1{
   text-align: center;
 }
 
-/* 가문 카드 */
+/* =========================
+   ✅ 가문 카드 (이미지 + 공용 모달)
+   ========================= */
 .familyGrid{
   margin-top: 18px;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: 14px;
   text-align: left;
 }
 
@@ -288,24 +290,104 @@ h1{
 }
 
 .familyCard{
-  border: 1px solid rgba(210,190,120,0.18);
-  border-radius: 16px;
-  padding: 16px 16px 14px;
-  background: rgba(255,255,255,0.03);
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.45) inset;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
 }
 
-.familyCard h2{
-  margin: 0 0 10px;
+.familyCard:focus-visible{
+  outline: 2px solid rgba(210,190,120,0.55);
+  outline-offset: 4px;
+  border-radius: 18px;
+}
+
+.familyInner{
+  position: relative;
+  border: 1px solid rgba(210,190,120,0.18);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.03);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.45) inset;
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.familyCard:hover .familyInner{
+  border-color: rgba(210,190,120,0.35);
+  transform: translateY(-1px);
+}
+
+.familyThumb{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(255,255,255,0.02);
+  overflow: hidden;
+}
+
+.familyThumb img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+
+  filter: grayscale(1) contrast(1.05) brightness(0.92);
+  transform: scale(1.02);
+  transition: filter 260ms ease, transform 260ms ease;
+}
+
+.familyCard:hover .familyThumb img,
+.familyCard:focus-within .familyThumb img{
+  filter: grayscale(0) contrast(1.02) brightness(1);
+  transform: scale(1.06);
+}
+
+/* 클릭 힌트 */
+.familyHint{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  font-family: "Cinzel", serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(236,236,236,0.85);
+}
+
+.familyHintDot{
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(210,190,120,0.7);
+  box-shadow: 0 0 10px rgba(210,190,120,0.25);
+}
+
+.familyFront{
+  padding: 14px 16px 14px;
+  text-align: center;
+}
+
+.familyFront h2{
+  margin: 0 0 8px;
   font-family: "Cinzel", serif;
   letter-spacing: 2px;
   font-size: 15px;
   font-weight: 700;
   color: rgba(236,236,236,0.95);
-  text-align: center;
 }
 
-.familyCard p{
+.familyFront p{
   margin: 0 0 8px;
   line-height: 1.6;
   font-size: 15px;
@@ -331,12 +413,36 @@ h1{
   color: rgba(236,236,236,0.85);
 }
 
+.familyCta{
+  margin: 12px auto 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(210,190,120,0.28);
+  background: rgba(210,190,120,0.10);
+  color: rgba(236,236,236,0.92);
+  font-family: "Cinzel", serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+.familyCta:hover{
+  transform: translateY(-1px);
+  border-color: rgba(210,190,120,0.40);
+  background: rgba(210,190,120,0.14);
+}
+
+/* 카드에선 숨김(모달 소스로만 사용) */
+.familyBack{
+  display: none !important;
+}
+
 /* =========================
    ✅ 지역 섹션: "요약만 카드" + 공용 모달
-   - 카드: 이미지 + 제목 + 1줄 소개 + 요약(3~4줄) + 키워드 + "기록서 펼치기"
-   - 기존 regionBack(아코디언 전문)은 "숨겨둔 원문"으로만 사용하고 모달에 복제
    ========================= */
-
 .regionGrid{
   margin-top: 18px;
   display: grid;
@@ -454,7 +560,7 @@ h1{
   text-align: center;
 }
 
-/* 카드 요약(기존 backSummary에서 가져온 3~4줄 느낌) */
+/* 카드 요약 */
 .regionMini{
   margin: 10px 14px 10px;
   padding: 12px 12px;
@@ -621,6 +727,21 @@ h1{
   color: rgba(236,236,236,0.92);
 }
 
+.modalHero{
+  margin: 0 0 12px;
+  border: 1px solid rgba(210,190,120,0.16);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+}
+
+.modalHero img{
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
 /* 모달 안 키워드 + 아코디언(원본 스타일 재사용) */
 .modalBody .keywordRow{
   display: flex;
@@ -690,6 +811,9 @@ h1{
   .regionInner,
   .regionThumb img,
   .regionCta,
+  .familyInner,
+  .familyThumb img,
+  .familyCta,
   .modalClose{
     transition: none !important;
   }
@@ -765,51 +889,275 @@ body.modal-open{
         신의 육신을 나눠 삼킨 다섯 혈통은 서로 다른 권능과 <span class="blood">저주</span>를 물려받았다.
       </p>
 
-      <div class="familyGrid">
-        <article class="familyCard">
-          <h2>노르벨</h2>
-          <p>예지와 계시를 다룬다. 노르벨의 자손들은 모두 맹인으로 태어난다.</p>
-          <p>이들은 모든 신식자를 죄인으로 규정하고 성지 '벨세인'에 머무르며 멸망을 대비하고 있다.</p>
-          <div class="tagRow">
-            <span class="tag">영토: 아르케인 산맥</span>
-          </div>
-        </article>
+      <div class="familyGrid" id="familyGrid">
 
-        <article class="familyCard">
-          <h2>세르몬트</h2>
-          <p>말과 서약이 곧 법이 된다. 언령은 현실을 초월하지만 반드시 대가를 치러야 한다.</p>
-          <p>세르몬트 가문의 무덤엔 이름 없는 자들의 묘비가 존재한다.</p>
-          <div class="tagRow">
-            <span class="tag">영토: 레티아</span>
-          </div>
-        </article>
+        <!-- 노르벨 -->
+        <div class="familyCard" role="button" tabindex="0" aria-label="노르벨 가문 기록 열기">
+          <div class="familyInner">
+            <div class="familyHint"><span class="familyHintDot"></span>CLICK TO OPEN</div>
+            <div class="familyThumb">
+              <!-- ✅ PNG 경로: assets/img/family_norbel.png -->
+              <img src="assets/img/family_norbel.png" alt="아드리안 노르벨" loading="lazy">
+            </div>
 
-        <article class="familyCard">
-          <h2>발데인</h2>
-          <p>죽지 않는 생명과 회복을 다룬다. 하지만 불사에는 끝나지 않는 대가가 따른다.</p>
-          <p>그들은 완전한 죽음에 이를 방법을 찾고 있다. 간절히. 필사적으로.</p>
-          <div class="tagRow">
-            <span class="tag">영토: 에스테라</span>
-          </div>
-        </article>
+            <div class="familyFront">
+              <h2>노르벨</h2>
+              <p>예지와 계시를 다룬다. 노르벨의 자손들은 모두 맹인으로 태어난다.</p>
+              <p>이들은 모든 신식자를 죄인으로 규정하고 성지 '벨세인'에 머무르며 멸망을 대비하고 있다.</p>
 
-        <article class="familyCard">
-          <h2>오스카르트</h2>
-          <p>파괴되지 않는 육신을 좇는다. 전투와 시험을 신앙처럼 여긴다.</p>
-          <p>그러나 강인함은 젊음과 함께 깎여나가고, 노쇠한 이들은 명예로운 죽음을 찾아 떠나야만 한다.</p>
-          <div class="tagRow">
-            <span class="tag">영토: 스톤폴</span>
-          </div>
-        </article>
+              <div class="tagRow">
+                <span class="tag">권능: 예지</span>
+                <span class="tag">저주: 실명</span>
+                <span class="tag">구역: 아르케인 산맥 일부</span>
+              </div>
 
-        <article class="familyCard">
-          <h2>실렌하임</h2>
-          <p>혈맹과 귀속의 힘을 다룬다. 맹세는 영원한 생명과 젊음을 보장하지만, 자유를 거둔다.</p>
-          <p>피의 맹약에 덧없이 묶인 이들은 오늘도 새로운 가족을 찾고 있다.</p>
-          <div class="tagRow">
-            <span class="tag">영토: 실렌하임 영지</span>
+              <button class="familyCta" type="button" data-action="openFamily">인물 기록 보기 →</button>
+            </div>
+
+            <div class="familyBack"
+              data-title="노르벨"
+              data-hero="assets/img/family_norbel.png"
+              data-hero-alt="아드리안 노르벨"
+            >
+              <div class="backSummary">
+                <p>예지와 계시를 다룬다. 노르벨의 자손들은 모두 맹인으로 태어난다. 성지 '벨세인'에 머무르며 멸망을 대비한다.</p>
+              </div>
+
+              <div class="accordion">
+                <div class="accPanel active">
+                  <h3>■ 권능 · 저주 · 구역</h3>
+                  <p><strong>권능:</strong> 예지</p>
+                  <p><strong>저주:</strong> 실명</p>
+                  <p><strong>구역:</strong> 아르케인 산맥 일부</p>
+                </div>
+
+                <div class="accPanel active">
+                  <h3>■ 가주</h3>
+                  <p><strong>가주:</strong> 아드리안 노르벨</p>
+                  <p><strong>나이:</strong> 26세</p>
+                  <p>오스카르트의 참략으로 인해 어린 나이에 부모를 잃고 노르벨의 수장이 된 인물.</p>
+                  <p>12살이 될 무렵 어떤 예언을 받고 신식자 일족을 전부 죄인으로 규정 후 배척 및 은거 생활을 이어오고 있다.</p>
+                </div>
+              </div>
+            </div>
+
           </div>
-        </article>
+        </div>
+
+        <!-- 세르몬트 -->
+        <div class="familyCard" role="button" tabindex="0" aria-label="세르몬트 가문 기록 열기">
+          <div class="familyInner">
+            <div class="familyHint"><span class="familyHintDot"></span>CLICK TO OPEN</div>
+            <div class="familyThumb">
+              <!-- ✅ PNG 경로: assets/img/family_sermont.png -->
+              <img src="assets/img/family_sermont.png" alt="칼 세르몬트" loading="lazy">
+            </div>
+
+            <div class="familyFront">
+              <h2>세르몬트</h2>
+              <p>말과 서약이 곧 법이 된다. 언령은 현실을 초월하지만 반드시 대가를 치러야 한다.</p>
+              <p>세르몬트 가문의 무덤엔 이름 없는 자들의 묘비가 존재한다.</p>
+
+              <div class="tagRow">
+                <span class="tag">권능: 마법</span>
+                <span class="tag">저주: 단명</span>
+                <span class="tag">구역: 레티아</span>
+              </div>
+
+              <button class="familyCta" type="button" data-action="openFamily">인물 기록 보기 →</button>
+            </div>
+
+            <div class="familyBack"
+              data-title="세르몬트"
+              data-hero="assets/img/family_sermont.png"
+              data-hero-alt="칼 세르몬트"
+            >
+              <div class="backSummary">
+                <p>말과 서약이 법이 되는 혈통. 언령은 현실을 초월하나 반드시 대가를 요구한다. 무덤엔 이름 없는 자들의 묘비가 남아 있다.</p>
+              </div>
+
+              <div class="accordion">
+                <div class="accPanel active">
+                  <h3>■ 권능 · 저주 · 구역</h3>
+                  <p><strong>권능:</strong> 마법</p>
+                  <p><strong>저주:</strong> 단명</p>
+                  <p><strong>구역:</strong> 레티아</p>
+                </div>
+
+                <div class="accPanel active">
+                  <h3>■ 가주</h3>
+                  <p><strong>가주:</strong> 칼 세르몬트</p>
+                  <p><strong>나이:</strong> 32세</p>
+                  <p>분야를 불문하고 '마법' 자체에 엄청난 두각을 보였던 불세출의 천재.</p>
+                  <p>비상한 두뇌 덕분에 세르몬트 가문의 정치 싸움에서 손쉽게 승리해 가주가 되었다.</p>
+                  <p>최근 '어떤 학문'에 크게 흥미를 가져 검은 탑에 틀어박혔단 소문이 돌고 있다.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 발데인 -->
+        <div class="familyCard" role="button" tabindex="0" aria-label="발데인 가문 기록 열기">
+          <div class="familyInner">
+            <div class="familyHint"><span class="familyHintDot"></span>CLICK TO OPEN</div>
+            <div class="familyThumb">
+              <!-- ✅ PNG 경로: assets/img/family_baldein.png -->
+              <img src="assets/img/family_baldein.png" alt="일리야 발데인" loading="lazy">
+            </div>
+
+            <div class="familyFront">
+              <h2>발데인</h2>
+              <p>죽지 않는 생명과 회복을 다룬다. 하지만 불사에는 끝나지 않는 대가가 따른다.</p>
+              <p>그들은 완전한 죽음에 이를 방법을 찾고 있다. 간절히. 필사적으로.</p>
+
+              <div class="tagRow">
+                <span class="tag">권능: 불사</span>
+                <span class="tag">저주: 불사</span>
+                <span class="tag">구역: 에스테라</span>
+              </div>
+
+              <button class="familyCta" type="button" data-action="openFamily">인물 기록 보기 →</button>
+            </div>
+
+            <div class="familyBack"
+              data-title="발데인"
+              data-hero="assets/img/family_baldein.png"
+              data-hero-alt="일리야 발데인"
+            >
+              <div class="backSummary">
+                <p>죽지 않는 생명과 회복. 불사는 구원이 아니라 끝나지 않는 대가다. 그들은 완전한 죽음을 찾고 있다.</p>
+              </div>
+
+              <div class="accordion">
+                <div class="accPanel active">
+                  <h3>■ 권능 · 저주 · 구역</h3>
+                  <p><strong>권능:</strong> 불사</p>
+                  <p><strong>저주:</strong> 불사</p>
+                  <p><strong>구역:</strong> 에스테라</p>
+                </div>
+
+                <div class="accPanel active">
+                  <h3>■ 가주</h3>
+                  <p><strong>가주:</strong> 일리야 발데인</p>
+                  <p><strong>나이:</strong> 21세</p>
+                  <p>발데인 가문의 현 수장. 태어날 때부터 불사의 권능과 저주를 동시에 물려받았다.</p>
+                  <p>선대 가주의 기록을 열람한 뒤로 그들의 노화는 멈추지 않으며, 육신은 서서히 붕괴해 간다는 사실을 누구보다 잘 인지하고 있다.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 오스카르트 -->
+        <div class="familyCard" role="button" tabindex="0" aria-label="오스카르트 가문 기록 열기">
+          <div class="familyInner">
+            <div class="familyHint"><span class="familyHintDot"></span>CLICK TO OPEN</div>
+            <div class="familyThumb">
+              <!-- ✅ PNG 경로: assets/img/family_oskart.png -->
+              <img src="assets/img/family_oskart.png" alt="이자크 오스카르트" loading="lazy">
+            </div>
+
+            <div class="familyFront">
+              <h2>오스카르트</h2>
+              <p>파괴되지 않는 육신을 좇는다. 전투와 시험을 신앙처럼 여긴다.</p>
+              <p>그러나 강인함은 젊음과 함께 깎여나가고, 노쇠한 이들은 명예로운 죽음을 찾아 떠나야만 한다.</p>
+
+              <div class="tagRow">
+                <span class="tag">권능: 강화</span>
+                <span class="tag">저주: 파괴욕</span>
+                <span class="tag">구역: 스톤폴</span>
+              </div>
+
+              <button class="familyCta" type="button" data-action="openFamily">인물 기록 보기 →</button>
+            </div>
+
+            <div class="familyBack"
+              data-title="오스카르트"
+              data-hero="assets/img/family_oskart.png"
+              data-hero-alt="이자크 오스카르트"
+            >
+              <div class="backSummary">
+                <p>전투와 시험을 신앙처럼 여기는 혈통. 강인함은 젊음과 함께 깎이고, 노쇠한 이들은 명예로운 죽음을 찾아 떠난다.</p>
+              </div>
+
+              <div class="accordion">
+                <div class="accPanel active">
+                  <h3>■ 권능 · 저주 · 구역</h3>
+                  <p><strong>권능:</strong> 강화</p>
+                  <p><strong>저주:</strong> 파괴욕</p>
+                  <p><strong>구역:</strong> 스톤폴</p>
+                </div>
+
+                <div class="accPanel active">
+                  <h3>■ 가주</h3>
+                  <p><strong>가주:</strong> 이자크 오스카르트</p>
+                  <p><strong>나이:</strong> 36세</p>
+                  <p>죽은 어미의 배를 가르고 태어났으나 오히려 그것을 자신이 오스카르트임을 증명하는 최초의 살상으로 받아들였다.</p>
+                  <p>성장 과정에서 폭력성을 억누르지 않았고, 검과 피로 스스로를 단련했다.</p>
+                  <p>전투연에서는 상대를 단순히 쓰러뜨리는 데 그치지 않고, 다시는 도전할 수 없도록 살해함으로써 왕의 자리에 올랐다.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 실렌하임 -->
+        <div class="familyCard" role="button" tabindex="0" aria-label="실렌하임 가문 기록 열기">
+          <div class="familyInner">
+            <div class="familyHint"><span class="familyHintDot"></span>CLICK TO OPEN</div>
+            <div class="familyThumb">
+              <!-- ✅ PNG 경로: assets/img/family_silenheim.png -->
+              <img src="assets/img/family_silenheim.png" alt="라자르 실렌하임" loading="lazy">
+            </div>
+
+            <div class="familyFront">
+              <h2>실렌하임</h2>
+              <p>혈맹과 귀속의 힘을 다룬다. 맹세는 영원한 생명과 젊음을 보장하지만, 자유를 거둔다.</p>
+              <p>피의 맹약에 덧없이 묶인 이들은 오늘도 새로운 가족을 찾고 있다.</p>
+
+              <div class="tagRow">
+                <span class="tag">권능: 피의 맹약</span>
+                <span class="tag">저주: 고독</span>
+                <span class="tag">구역: 실렌하임 영지</span>
+              </div>
+
+              <button class="familyCta" type="button" data-action="openFamily">인물 기록 보기 →</button>
+            </div>
+
+            <div class="familyBack"
+              data-title="실렌하임"
+              data-hero="assets/img/family_silenheim.png"
+              data-hero-alt="라자르 실렌하임"
+            >
+              <div class="backSummary">
+                <p>혈맹과 귀속의 힘. 영원한 젊음은 자유의 대가로 지불된다. 피의 맹약에 묶인 이들은 오늘도 새로운 가족을 찾는다.</p>
+              </div>
+
+              <div class="accordion">
+                <div class="accPanel active">
+                  <h3>■ 권능 · 저주 · 구역</h3>
+                  <p><strong>권능:</strong> 피의 맹약</p>
+                  <p><strong>저주:</strong> 고독</p>
+                  <p><strong>구역:</strong> 실렌하임 영지</p>
+                </div>
+
+                <div class="accPanel active">
+                  <h3>■ 시조</h3>
+                  <p><strong>이름:</strong> 라자르 실렌하임</p>
+                  <p>흡혈 감염의 최초 보유자이자, 실렌하임 가문의 시조.</p>
+                  <p>불사의 신체에 가까운 수명과 노화 지연을 얻는 대신, 생식 능력을 완전히 상실했다.</p>
+                  <p>그 결핍을 채우기 위해 인공적으로 ‘혈연’을 만들어냈고, 흡혈을 통해 혈맹을 형성하는 체제를 구축했다.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -842,7 +1190,6 @@ body.modal-open{
                 </div>
               </div>
 
-              <!-- ✅ 원문(전문) 보관용: 카드에선 숨김, 모달로 복제됨 -->
               <div class="regionBack">
                 <div class="backWrap">
                   <div class="backTop">
@@ -1150,7 +1497,7 @@ body.modal-open{
   </section>
 </div>
 
-<!-- ✅ 공용 모달 -->
+<!-- ✅ 공용 모달(지역+가문 공용) -->
 <div class="modalOverlay" id="regionModal" aria-hidden="true">
   <div class="modalDialog" role="dialog" aria-modal="true" aria-labelledby="regionModalTitle">
     <div class="modalHeader">
@@ -1400,11 +1747,13 @@ bgmToggle.addEventListener("click", ()=>{
 });
 
 /* =========================
-   ✅ 지역: 공용 모달
+   ✅ 공용 모달 (지역 + 가문)
    - 카드 클릭/버튼 클릭 -> 모달 오픈
-   - 모달 안에서 kwBtn 클릭 -> 패널 토글
+   - 지역: kwBtn -> 패널 토글
+   - 가문: hero 이미지 + 텍스트(아코디언 없이도 됨)
    ========================= */
 const regionGrid = document.getElementById("regionGrid");
+const familyGrid = document.getElementById("familyGrid");
 const modal = document.getElementById("regionModal");
 const modalTitle = document.getElementById("regionModalTitle");
 const modalBody = document.getElementById("regionModalBody");
@@ -1427,7 +1776,17 @@ function setModalOpen(isOpen){
   }
 }
 
-function openModalFromCard(card){
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/* ✅ 지역: 기존 로직 유지 */
+function openModalFromRegionCard(card){
   if(!card) return;
 
   lastFocusEl = document.activeElement;
@@ -1440,13 +1799,11 @@ function openModalFromCard(card){
 
   clearModal();
 
-  // 상단 요약(3~4줄 느낌)
   const lead = document.createElement("div");
   lead.className = "modalLead";
   lead.innerHTML = `<p>${escapeHtml(summaryText)}</p>`;
   modalBody.appendChild(lead);
 
-  // 원문(backWrap)에서 keywordRow + accordion 복제
   const sourceWrap = card.querySelector(".regionBack .backWrap");
   if(sourceWrap){
     const sourceKeywordRow = sourceWrap.querySelector(".keywordRow");
@@ -1454,7 +1811,6 @@ function openModalFromCard(card){
 
     if(sourceKeywordRow){
       const kwClone = sourceKeywordRow.cloneNode(true);
-      // 모달용 aria 정리
       kwClone.querySelectorAll(".kwBtn").forEach(btn=>{
         btn.setAttribute("aria-expanded","false");
       });
@@ -1467,7 +1823,6 @@ function openModalFromCard(card){
       modalBody.appendChild(accClone);
     }
 
-    // 기본으로 첫 패널 자동 오픈
     const firstBtn = modalBody.querySelector(".kwBtn");
     if(firstBtn && firstBtn.dataset.item){
       modalToggleAccordion(firstBtn.dataset.item);
@@ -1483,16 +1838,6 @@ function openModalFromCard(card){
   setModalOpen(true);
 }
 
-function closeModal(){
-  setModalOpen(false);
-  clearModal();
-  if(lastFocusEl && typeof lastFocusEl.focus === "function"){
-    lastFocusEl.focus();
-  }
-  lastFocusEl = null;
-}
-
-/* 모달 아코디언 토글 */
 function modalToggleAccordion(targetId){
   const kwBtns = modalBody.querySelectorAll(".kwBtn");
   const panels = modalBody.querySelectorAll(".accPanel");
@@ -1508,69 +1853,123 @@ function modalToggleAccordion(targetId){
     targetPanel.classList.add("active");
     const ownerBtn = modalBody.querySelector(`.kwBtn[data-item="${CSS.escape(targetId)}"]`);
     if(ownerBtn) ownerBtn.setAttribute("aria-expanded","true");
-
-    // 패널이 길 수 있으니, 열릴 때 살짝 위로 보이게
     targetPanel.scrollIntoView({behavior:"smooth", block:"start"});
   }
 }
 
-/* HTML 이스케이프(요약에 따옴표/기호 있어도 안전) */
-function escapeHtml(str){
-  return String(str)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+/* ✅ 가문: 공용 모달 */
+function openModalFromFamilyCard(card){
+  if(!card) return;
+
+  lastFocusEl = document.activeElement;
+
+  const back = card.querySelector(".familyBack");
+  const titleText = back?.dataset?.title || card.querySelector(".familyFront h2")?.textContent?.trim() || "가문";
+  const heroSrc = back?.dataset?.hero || "";
+  const heroAlt = back?.dataset?.heroAlt || titleText;
+
+  modalTitle.textContent = titleText;
+
+  clearModal();
+
+  if(heroSrc){
+    const hero = document.createElement("div");
+    hero.className = "modalHero";
+    hero.innerHTML = `<img src="${escapeHtml(heroSrc)}" alt="${escapeHtml(heroAlt)}" loading="lazy">`;
+    modalBody.appendChild(hero);
+  }
+
+  const summary = back?.querySelector(".backSummary p")?.textContent?.trim() || "";
+  if(summary){
+    const lead = document.createElement("div");
+    lead.className = "modalLead";
+    lead.innerHTML = `<p>${escapeHtml(summary)}</p>`;
+    modalBody.appendChild(lead);
+  }
+
+  const acc = back?.querySelector(".accordion");
+  if(acc){
+    const accClone = acc.cloneNode(true);
+    modalBody.appendChild(accClone);
+  }
+
+  setModalOpen(true);
 }
 
-/* 카드 클릭 -> 모달 오픈 */
+function closeModal(){
+  setModalOpen(false);
+  clearModal();
+  if(lastFocusEl && typeof lastFocusEl.focus === "function"){
+    lastFocusEl.focus();
+  }
+  lastFocusEl = null;
+}
+
+/* 지역 카드 클릭 -> 모달 */
 if(regionGrid){
   regionGrid.addEventListener("click", (e)=>{
-    const closeBtn = e.target.closest('[data-action="closeModal"]');
-    if(closeBtn) return;
-
     const cta = e.target.closest('button[data-action="openRecord"]');
     if(cta){
       e.stopPropagation();
       const card = e.target.closest(".regionCard");
-      openModalFromCard(card);
+      openModalFromRegionCard(card);
       return;
     }
-
     const card = e.target.closest(".regionCard");
     if(card){
-      openModalFromCard(card);
+      openModalFromRegionCard(card);
     }
   });
 
   regionGrid.addEventListener("keydown", (e)=>{
     const card = e.target.closest(".regionCard");
     if(!card) return;
-
     if(e.key === "Enter" || e.key === " "){
       e.preventDefault();
-      openModalFromCard(card);
+      openModalFromRegionCard(card);
     }
   });
 }
 
-/* 모달 내부 이벤트(키워드/닫기/바깥클릭/ESC) */
+/* 가문 카드 클릭 -> 모달 */
+if(familyGrid){
+  familyGrid.addEventListener("click", (e)=>{
+    const cta = e.target.closest('button[data-action="openFamily"]');
+    if(cta){
+      e.stopPropagation();
+      const card = e.target.closest(".familyCard");
+      openModalFromFamilyCard(card);
+      return;
+    }
+    const card = e.target.closest(".familyCard");
+    if(card){
+      openModalFromFamilyCard(card);
+    }
+  });
+
+  familyGrid.addEventListener("keydown", (e)=>{
+    const card = e.target.closest(".familyCard");
+    if(!card) return;
+    if(e.key === "Enter" || e.key === " "){
+      e.preventDefault();
+      openModalFromFamilyCard(card);
+    }
+  });
+}
+
+/* 모달 내부 이벤트(닫기/바깥클릭/ESC + 지역 키워드) */
 modal.addEventListener("click", (e)=>{
-  // 바깥 클릭 닫기
   if(e.target === modal){
     closeModal();
     return;
   }
 
-  // 닫기 버튼
   const closeBtn = e.target.closest('[data-action="closeModal"]');
   if(closeBtn){
     closeModal();
     return;
   }
 
-  // 키워드 버튼
   const kw = e.target.closest(".kwBtn");
   if(kw && kw.dataset.item){
     e.preventDefault();
