@@ -263,7 +263,7 @@ h1{
   font-weight: 600;
 }
 
-/* ✅ 리드 문단 (오타/중괄호 꼬임 수정) */
+/* ✅ 리드 문단 */
 .lead{
   margin: 16px auto 18px;
   max-width: 640px;
@@ -332,7 +332,7 @@ h1{
 }
 
 /* =========================
-   ✅ 지역 섹션 (5개) + 호버 흑백→컬러
+   ✅ 지역 섹션: 플립 카드 + 내부 아코디언
    ========================= */
 .regionGrid{
   margin-top: 18px;
@@ -347,18 +347,62 @@ h1{
   .regionCard--wide{ grid-column: 1 / -1; }
 }
 
+/* 바깥 컨테이너(높이 안정) */
+.regionFlip{
+  perspective: 1200px;
+}
+
+/* 플립 버튼(전체 카드) */
 .regionCard{
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* 포커스 링 */
+.regionCard:focus-visible{
+  outline: 2px solid rgba(210,190,120,0.55);
+  outline-offset: 4px;
+  border-radius: 18px;
+}
+
+.regionInner{
+  position: relative;
   border: 1px solid rgba(210,190,120,0.18);
   border-radius: 16px;
   overflow: hidden;
   background: rgba(255,255,255,0.03);
   box-shadow: 0 0 0 1px rgba(0,0,0,0.45) inset;
   transition: transform 180ms ease, border-color 180ms ease;
+
+  transform-style: preserve-3d;
 }
 
-.regionCard:hover{
+.regionCard:hover .regionInner{
   transform: translateY(-2px);
   border-color: rgba(210,190,120,0.35);
+}
+
+/* 플립 상태 */
+.regionCard.is-flipped .regionInner{
+  transform: rotateY(180deg);
+  border-color: rgba(210,190,120,0.35);
+}
+
+/* 앞/뒤 공통 */
+.regionFace{
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 앞면 */
+.regionFront{
+  position: relative;
 }
 
 .regionThumb{
@@ -386,7 +430,7 @@ h1{
   transform: scale(1.06);
 }
 
-.regionCard h2{
+.regionFront h2{
   margin: 14px 16px 8px;
   font-family: "Cinzel", serif;
   letter-spacing: 2px;
@@ -396,62 +440,219 @@ h1{
   text-align: center;
 }
 
-.regionCard p{
-  margin: 0 16px 16px;
+.regionFront p{
+  margin: 0 16px 18px;
   line-height: 1.6;
   font-size: 15px;
   color: rgba(236,236,236,0.90);
   text-align: center;
 }
 
-/* ✅ 지역 상세 패널 */
-.regionDetail{
-  margin-top: 18px;
-  border: 1px solid rgba(210,190,120,0.18);
-  border-radius: 16px;
-  padding: 18px 18px 16px;
-  background: rgba(255,255,255,0.03);
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.45) inset;
-  text-align: left;
+/* 클릭 힌트 배지 */
+.hintBadge{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+
+  font-family: "Cinzel", serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(236,236,236,0.85);
 }
 
-.regionDetailTitle{
-  margin: 0 0 10px;
+.hintDot{
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(210,190,120,0.7);
+  box-shadow: 0 0 10px rgba(210,190,120,0.25);
+}
+
+/* 뒤면 */
+.regionBack{
+  transform: rotateY(180deg);
+  background:
+    radial-gradient(800px 500px at 50% 0%, rgba(255,255,255,0.05), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.04), transparent 40%),
+    rgba(10,10,12,0.9);
+}
+
+/* 뒤면 내용 레이아웃 */
+.backWrap{
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 14px 14px;
+}
+
+.backTop{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 8px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+
+.backTitle{
+  margin: 0;
   font-family: "Cinzel", serif;
   letter-spacing: 2px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
-  text-align: center;
   color: rgba(236,236,236,0.95);
 }
 
-.regionDetailBody{
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.regionDetailBody h3{
-  margin: 14px 0 6px;
+/* 뒤로 버튼(크게) */
+.backBtn{
+  border: 1px solid rgba(210,190,120,0.28);
+  background: rgba(210,190,120,0.10);
+  color: rgba(236,236,236,0.92);
+  padding: 9px 12px;
+  border-radius: 12px;
   font-family: "Cinzel", serif;
   letter-spacing: 1px;
-  font-size: 14px;
-  color: rgba(210,190,120,0.8);
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+  white-space: nowrap;
 }
 
-.regionDetailBody p{
+.backBtn:hover{
+  transform: translateY(-1px);
+  border-color: rgba(210,190,120,0.40);
+  background: rgba(210,190,120,0.14);
+}
+
+/* 요약 */
+.backSummary{
+  padding: 12px 10px 8px;
+  text-align: center;
+}
+
+.backSummary p{
+  margin: 0;
+  line-height: 1.6;
+  font-size: 14px;
+  color: rgba(236,236,236,0.90);
+}
+
+/* 키워드 버튼 2개 */
+.keywordRow{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 10px 6px;
+}
+
+.kwBtn{
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.03);
+  color: rgba(236,236,236,0.90);
+  padding: 9px 12px;
+  border-radius: 999px;
+  font-family: "Cinzel", serif;
+  letter-spacing: 1px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.kwBtn:hover{
+  transform: translateY(-1px);
+  border-color: rgba(210,190,120,0.35);
+  background: rgba(210,190,120,0.08);
+}
+
+.kwBtn[aria-expanded="true"]{
+  border-color: rgba(210,190,120,0.45);
+  background: rgba(210,190,120,0.12);
+}
+
+/* 아코디언 패널 */
+.accordion{
+  margin: 8px 10px 0;
+  border: 1px solid rgba(210,190,120,0.18);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.45) inset;
+  overflow: hidden;
+}
+
+.accPanel{
+  display: none;
+  padding: 12px 12px 10px;
+  text-align: left;
+}
+
+.accPanel.active{
+  display: block;
+}
+
+.accPanel h3{
+  margin: 0 0 8px;
+  font-family: "Cinzel", serif;
+  letter-spacing: 1px;
+  font-size: 13px;
+  color: rgba(210,190,120,0.85);
+}
+
+.accPanel p{
   margin: 0 0 10px;
   line-height: 1.75;
-  font-size: 15px;
+  font-size: 14px;
   color: rgba(236,236,236,0.92);
 }
 
-.regionDetailBody .sep{
-  height: 1px;
-  margin: 14px 0;
-  background: linear-gradient(90deg, transparent, rgba(210,190,120,0.35), transparent);
-  border: 0;
+/* 플립 카드 높이(앞/뒤 동일하게) */
+.regionInner{
+  min-height: 360px;
+}
+.regionCard--wide .regionInner{
+  min-height: 390px;
 }
 
+@media (min-width: 720px){
+  .regionInner{ min-height: 360px; }
+  .regionCard--wide .regionInner{ min-height: 360px; }
+}
+
+/* 모션 줄이기 선호 */
+@media (prefers-reduced-motion: reduce){
+  .regionInner,
+  .regionThumb img,
+  .regionCard:hover .regionInner,
+  .regionCard.is-flipped .regionInner{
+    transition: none !important;
+  }
+  .regionCard.is-flipped .regionInner{
+    transform: none !important; /* 플립 대신 즉시 전환 */
+  }
+  .regionBack{
+    transform: none !important;
+    display: none;
+  }
+  .regionCard.is-flipped .regionBack{
+    display: block;
+    position: relative;
+  }
+  .regionFace{
+    position: relative;
+  }
+}
+
+/* ====== 기존 페이드 ====== */
 .fadeOut{ opacity:0; }
 </style>
 </head>
@@ -564,59 +765,296 @@ h1{
       </div>
     </div>
 
-    <!-- ✅ 3) 지역 (카드 + 상세패널) -->
+    <!-- ✅ 3) 지역 (플립 카드 + 내부 아코디언) -->
     <div class="page" id="page-regions">
       <h1>지역</h1>
-      <p class="lead">카드를 누르면 해당 지역의 상세 기록이 펼쳐진다.</p>
+      <p class="lead">카드를 누르면 기록이 펼쳐진다. 뒤쪽에서 항목을 선택하면 상세가 확장된다.</p>
 
       <div class="regionGrid" id="regionGrid">
-        <article class="regionCard" tabindex="0" role="button" data-region="north" aria-label="북부 아르케인 산맥 상세 보기">
-          <div class="regionThumb">
-            <img src="assets/img/north.png" alt="아르케인 산맥" loading="lazy">
-          </div>
-          <h2>아르케인 산맥</h2>
-          <p>대륙 최북단 만년설 산맥.</p>
-        </article>
 
-        <article class="regionCard" tabindex="0" role="button" data-region="south" aria-label="남부 레티아 상세 보기">
-          <div class="regionThumb">
-            <img src="assets/img/south.png" alt="레티아" loading="lazy">
-          </div>
-          <h2>레티아</h2>
-          <p>카르니스 최대 항구이자 학술 도시</p>
-        </article>
+        <!-- 북부 -->
+        <div class="regionFlip regionCard--wide">
+          <button class="regionCard" type="button" data-region="north" aria-expanded="false" aria-label="북부 아르케인 산맥 기록 열기">
+            <div class="regionInner">
+              <!-- FRONT -->
+              <div class="regionFace regionFront">
+                <div class="hintBadge"><span class="hintDot"></span>CLICK TO OPEN</div>
+                <div class="regionThumb">
+                  <img src="assets/img/north.png" alt="아르케인 산맥" loading="lazy">
+                </div>
+                <h2>아르케인 산맥</h2>
+                <p>대륙 최북단 만년설 산맥.</p>
+              </div>
 
-        <article class="regionCard" tabindex="0" role="button" data-region="east" aria-label="동부 매바람 황야 상세 보기">
-          <div class="regionThumb">
-            <img src="assets/img/east.png" alt="스톤폴" loading="lazy">
-          </div>
-          <h2>매바람 황야 · 스톤폴</h2>
-          <p>메마른 황야와 협곡 고개 요새</p>
-        </article>
+              <!-- BACK -->
+              <div class="regionFace regionBack">
+                <div class="backWrap">
+                  <div class="backTop">
+                    <h3 class="backTitle">북부 기록</h3>
+                    <button class="backBtn" type="button" data-action="flipBack" aria-label="뒤로 돌아가기">← 돌아가기</button>
+                  </div>
 
-        <article class="regionCard" tabindex="0" role="button" data-region="west" aria-label="서부 실렌하임 영지 상세 보기">
-          <div class="regionThumb">
-            <img src="assets/img/west.png" alt="실렌하임 영지" loading="lazy">
-          </div>
-          <h2>실렌하임 영지</h2>
-          <p>빛이 들지 않는 혈맹의 땅</p>
-        </article>
+                  <div class="backSummary">
+                    <p>눈과 얼음이 영토를 지배한다. 고산 협곡과 설빙 균열은 외부인의 길을 끊는다.</p>
+                  </div>
 
-        <article class="regionCard regionCard--wide" tabindex="0" role="button" data-region="central" aria-label="중앙 에스테라 상세 보기">
-          <div class="regionThumb">
-            <img src="assets/img/central.png" alt="에스테라" loading="lazy">
-          </div>
-          <h2>에스테라</h2>
-          <p>사치와 향락의 도시</p>
-        </article>
-      </div>
+                  <div class="keywordRow" role="tablist" aria-label="북부 항목 선택">
+                    <button class="kwBtn" type="button" data-item="north-area" aria-expanded="false">아르케인 산맥</button>
+                    <button class="kwBtn" type="button" data-item="north-site" aria-expanded="false">벨세인</button>
+                  </div>
 
-      <section class="regionDetail" id="regionDetail" aria-live="polite">
-        <h2 class="regionDetailTitle" id="regionDetailTitle">지역을 선택해라</h2>
-        <div class="regionDetailBody" id="regionDetailBody">
-          <p>위 카드 중 하나를 누르면, 해당 지역의 기록이 여기에 표시된다.</p>
+                  <div class="accordion" aria-label="북부 상세">
+                    <div class="accPanel" id="north-area">
+                      <h3>■ 아르케인 산맥</h3>
+                      <p>대륙 최북단을 가로지르는 거대한 만년설 지대. 공식 명칭은 아르케인 산맥.</p>
+                      <p>연중 대부분이 눈과 얼음으로 뒤덮여 있으며, 해빙기는 짧고 여름조차 냉기를 품는다.</p>
+                      <p>깎아지른 고산 협곡과 깊은 설빙 균열이 이어져 있어 외부인의 접근은 극히 어렵다.</p>
+                      <p>과거 이 산맥은 노르벨 가문의 영토였다. 예언과 속죄를 중시하던 가문은 세속과 거리를 두고 산맥 깊은 곳에서 은거하듯 살아왔다.</p>
+                      <p>그러나 현재 산맥 대부분은 오스카르트 가문이 점령한 상태다. 군사적 요충지로서의 가치를 노린 침공이었다고 전해진다.</p>
+                      <p>눈의 일족은 적극적으로 저항하지 않았다. 그들의 선택이었는지, 의도된 반응이었는지는 밝혀지지 않았다.</p>
+                    </div>
+
+                    <div class="accPanel" id="north-site">
+                      <h3>■ 백안의 전당 벨세인</h3>
+                      <p>노르벨의 가주는 대대로 벨세인에서 속죄의 의식을 치른 뒤 예언을 행했다.</p>
+                      <p>미래를 묻기 위해 찾아오는 자들이 있었으나, 예언의 전말은 가주 외에는 누구에게도 전해지지 않는다.</p>
+                      <p>현재 산맥의 대부분은 오스카르트의 지배 아래에 있다. 다만 침략 당시 노르벨의 장로 일곱 명이 희생하여 벨세인만은 보전되었다고 기록되어 있다.</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </button>
         </div>
-      </section>
+
+        <!-- 남부 -->
+        <div class="regionFlip">
+          <button class="regionCard" type="button" data-region="south" aria-expanded="false" aria-label="남부 레티아 기록 열기">
+            <div class="regionInner">
+              <!-- FRONT -->
+              <div class="regionFace regionFront">
+                <div class="hintBadge"><span class="hintDot"></span>CLICK TO OPEN</div>
+                <div class="regionThumb">
+                  <img src="assets/img/south.png" alt="레티아" loading="lazy">
+                </div>
+                <h2>레티아</h2>
+                <p>카르니스 최대 항구이자 학술 도시</p>
+              </div>
+
+              <!-- BACK -->
+              <div class="regionFace regionBack">
+                <div class="backWrap">
+                  <div class="backTop">
+                    <h3 class="backTitle">남부 기록</h3>
+                    <button class="backBtn" type="button" data-action="flipBack" aria-label="뒤로 돌아가기">← 돌아가기</button>
+                  </div>
+
+                  <div class="backSummary">
+                    <p>항구의 소음과 서고의 먼지가 공존한다. 바다를 통해 지식이 유입되고, 금서도 함께 들어온다.</p>
+                  </div>
+
+                  <div class="keywordRow" role="tablist" aria-label="남부 항목 선택">
+                    <button class="kwBtn" type="button" data-item="south-area" aria-expanded="false">레티아</button>
+                    <button class="kwBtn" type="button" data-item="south-site" aria-expanded="false">검은 탑</button>
+                  </div>
+
+                  <div class="accordion" aria-label="남부 상세">
+                    <div class="accPanel" id="south-area">
+                      <h3>■ 레티아</h3>
+                      <p>카르니스 최대 규모의 항구이자 학술 도시.</p>
+                      <p>남부 해안에 위치하며, 대륙에서 가장 활발한 해상 교역이 이루어지는 곳이다. 정확한 건립 연대는 전해지지 않지만, 세르몬트 가문이 본거지로 삼은 이후 도시의 성격이 급격히 변했다.</p>
+                      <p>세르몬트는 해상 교역을 장려했고, 카르니스 내부 세력뿐 아니라 바다 너머의 이민족들과도 적극적으로 교류하였다.</p>
+                      <p>그 과정에서 외부의 문화, 기술, 언어, 학문이 유입되었고, 레티아는 단순한 항구 도시에서 지식의 중심지로 발전했다.</p>
+                      <p>현재 레티아는 상인과 선원뿐 아니라 학자, 기록관, 연금술사, 기술자 등 다양한 탐구자들이 모이는 도시다. 대륙에서 가장 많은 외래 문헌과 이국 서적이 유통되는 곳이기도 하다.</p>
+                    </div>
+
+                    <div class="accPanel" id="south-site">
+                      <h3>■ 검은 탑</h3>
+                      <p>세르몬트 가문의 성 인근에는 ‘검은 탑’이라 불리는 거대한 석조 탑이 존재한다. 도시의 상징이자, 레티아가 학술 도시로 자리 잡게 된 핵심 시설이다.</p>
+                      <p>검은 탑은 총 100층 구조로 이루어져 있으며, 내부에는 방대한 연구 서적, 학술지, 고문서, 각종 기록, 이민족 문헌, 금서 등이 보관되어 있다. 대륙에서 가장 큰 지식 보관 시설로 알려져 있다.</p>
+                      <p>탑은 상층부로 갈수록 보안이 강화되며, 일부 층은 외부에 존재 자체가 공개되지 않는다. 최상층에서 어떤 연구가 이루어지는지는 기밀로 취급된다.</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <!-- 동부 -->
+        <div class="regionFlip">
+          <button class="regionCard" type="button" data-region="east" aria-expanded="false" aria-label="동부 기록 열기">
+            <div class="regionInner">
+              <!-- FRONT -->
+              <div class="regionFace regionFront">
+                <div class="hintBadge"><span class="hintDot"></span>CLICK TO OPEN</div>
+                <div class="regionThumb">
+                  <img src="assets/img/east.png" alt="매바람 황야와 스톤폴" loading="lazy">
+                </div>
+                <h2>매바람 황야 · 스톤폴</h2>
+                <p>메마른 황야와 협곡 고개 요새</p>
+              </div>
+
+              <!-- BACK -->
+              <div class="regionFace regionBack">
+                <div class="backWrap">
+                  <div class="backTop">
+                    <h3 class="backTitle">동부 기록</h3>
+                    <button class="backBtn" type="button" data-action="flipBack" aria-label="뒤로 돌아가기">← 돌아가기</button>
+                  </div>
+
+                  <div class="backSummary">
+                    <p>낮의 열기와 밤의 냉기가 번갈아 목을 조른다. 바람은 길을 지우고, 요새는 길을 소유한다.</p>
+                  </div>
+
+                  <div class="keywordRow" role="tablist" aria-label="동부 항목 선택">
+                    <button class="kwBtn" type="button" data-item="east-area" aria-expanded="false">매바람 황야</button>
+                    <button class="kwBtn" type="button" data-item="east-site" aria-expanded="false">스톤폴</button>
+                  </div>
+
+                  <div class="accordion" aria-label="동부 상세">
+                    <div class="accPanel" id="east-area">
+                      <h3>■ 매바람 황야</h3>
+                      <p>대륙 동부에 펼쳐진 광활한 모래사막 지대. 공식 명칭은 매바람 황야라 불린다.</p>
+                      <p>이 지역은 기후가 극단적이다. 낮에는 살을 태울 듯한 열기가 지속되고, 밤이 되면 급격히 기온이 떨어진다.</p>
+                      <p>강한 모래바람이 자주 불어 시야를 가리며, 지형은 끊임없이 변한다.</p>
+                      <p>황야에는 몬스터가 밀집해 있다. 특히 사막형 포식종과 변이 생물이 다수 서식하며, 이동 상단과 여행자들이 자주 습격을 당한다.</p>
+                      <p>농경이나 정착엔 불리하지만 전략적 가치는 높다. 황야를 가로지르는 유일한 고개를 통제하는 자가 동부 교역로 전체를 장악하게 되기 때문이다.</p>
+                    </div>
+
+                    <div class="accPanel" id="east-site">
+                      <h3>■ 고개 요새 스톤폴</h3>
+                      <p>매바람 황야 중앙의 협곡 고개에 세워진 대형 석조 요새. 이곳을 스톤폴이라 부른다.</p>
+                      <p>가파른 절벽 사이에 자리 잡은 천연 요충지로, 동서 교역로의 관문 역할을 한다.</p>
+                      <p>현재 스톤폴은 오스카르트 가문의 지배 아래에 있다. 가문은 이곳에서 10년마다 ‘전투연’을 열어 가장 강한 자를 왕으로 추대해왔다.</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <!-- 서부 -->
+        <div class="regionFlip">
+          <button class="regionCard" type="button" data-region="west" aria-expanded="false" aria-label="서부 실렌하임 영지 기록 열기">
+            <div class="regionInner">
+              <!-- FRONT -->
+              <div class="regionFace regionFront">
+                <div class="hintBadge"><span class="hintDot"></span>CLICK TO OPEN</div>
+                <div class="regionThumb">
+                  <img src="assets/img/west.png" alt="실렌하임 영지" loading="lazy">
+                </div>
+                <h2>실렌하임 영지</h2>
+                <p>빛이 들지 않는 혈맹의 땅</p>
+              </div>
+
+              <!-- BACK -->
+              <div class="regionFace regionBack">
+                <div class="backWrap">
+                  <div class="backTop">
+                    <h3 class="backTitle">서부 기록</h3>
+                    <button class="backBtn" type="button" data-action="flipBack" aria-label="뒤로 돌아가기">← 돌아가기</button>
+                  </div>
+
+                  <div class="backSummary">
+                    <p>안개가 숲을 봉인하고, 거래가 인간을 봉인한다. 이름이 지워진 거래는 피로 남는다.</p>
+                  </div>
+
+                  <div class="keywordRow" role="tablist" aria-label="서부 항목 선택">
+                    <button class="kwBtn" type="button" data-item="west-area" aria-expanded="false">실렌하임 영지</button>
+                    <button class="kwBtn" type="button" data-item="west-site" aria-expanded="false">암시장</button>
+                  </div>
+
+                  <div class="accordion" aria-label="서부 상세">
+                    <div class="accPanel" id="west-area">
+                      <h3>■ 실렌하임 영지</h3>
+                      <p>대륙 서쪽 끝, 해가 길게 머무르지 않는 땅. 이곳을 실렌하임 영지라 부른다.</p>
+                      <p>연중 짙은 안개가 숲을 뒤덮고 있으며, 일조량이 부족해 농경은 제한적이다. 대신 음습한 숲과 습지가 광범위하게 형성되어 있다.</p>
+                      <p>영지는 하나의 중심 도시가 아닌, 점처럼 흩어진 거점들로 이루어져 있다. 각 거점은 독립적으로 보이지만, 영주인 '첫 아비' 라자르 실렌하임의 혈연으로 이루어져 있으며, 이를 ‘혈맹 거점’이라 부른다.</p>
+                    </div>
+
+                    <div class="accPanel" id="west-site">
+                      <h3>■ 암시장</h3>
+                      <p>실렌하임 영지는 대륙 최대 규모의 암시장이 형성된 지역으로 알려져 있다. 밀수품과 금지된 의식 도구, 신원 세탁과 인신 매매까지, 공식 기록에 남지 않는 거래가 주로 이루어진다.</p>
+                      <p>일부 주술적 거래에는 실렌하임 혈맹의 권능이 개입된다. 이때 체결되는 것이 이른바 ‘피 계약’이다.</p>
+                      <p>겉으로는 단순한 맹약처럼 보이지만, 계약이 성립되는 순간 당사자는 혈맹의 질서에 묶인다. 그 과정에서 속임수에 휘말려 실렌하임 일족으로 편입되는 자도 적지 않다.</p>
+                      <p>한번 피로 맺어진 계약은 쉽게 끊어지지 않는다. 영지를 벗어난 뒤에도 그 효력이 사라지지 않는다고 전해진다.</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <!-- 중앙 -->
+        <div class="regionFlip regionCard--wide">
+          <button class="regionCard" type="button" data-region="central" aria-expanded="false" aria-label="중앙 에스테라 기록 열기">
+            <div class="regionInner">
+              <!-- FRONT -->
+              <div class="regionFace regionFront">
+                <div class="hintBadge"><span class="hintDot"></span>CLICK TO OPEN</div>
+                <div class="regionThumb">
+                  <img src="assets/img/central.png" alt="에스테라" loading="lazy">
+                </div>
+                <h2>에스테라</h2>
+                <p>사치와 향락의 도시</p>
+              </div>
+
+              <!-- BACK -->
+              <div class="regionFace regionBack">
+                <div class="backWrap">
+                  <div class="backTop">
+                    <h3 class="backTitle">중앙 기록</h3>
+                    <button class="backBtn" type="button" data-action="flipBack" aria-label="뒤로 돌아가기">← 돌아가기</button>
+                  </div>
+
+                  <div class="backSummary">
+                    <p>원형의 도시는 결계로 묶였고, 쾌락은 가격표로 묶였다. 돌에 새겨진 이름은 도시의 비밀을 지킨다.</p>
+                  </div>
+
+                  <div class="keywordRow" role="tablist" aria-label="중앙 항목 선택">
+                    <button class="kwBtn" type="button" data-item="central-area" aria-expanded="false">에스테라</button>
+                    <button class="kwBtn" type="button" data-item="central-site" aria-expanded="false">결계석</button>
+                  </div>
+
+                  <div class="accordion" aria-label="중앙 상세">
+                    <div class="accPanel" id="central-area">
+                      <h3>■ 에스테라</h3>
+                      <p>사치와 향락의 도시. 지상낙원이라 불린다.</p>
+                      <p>카르니스 대륙 중앙에 자리 잡은 원형 도시로, 결계석으로 이루어진 세 겹의 원형 경계로 나뉘어 있다.</p>
+                      <p>에스테라는 오래전부터 상업과 쾌락 산업으로 번영해왔다. 대륙 각지의 상인, 귀족, 추방자, 모험가들이 이곳을 찾는다.</p>
+                      <p>제 2환에는 고급 연회장과 향락관, 도박장, 사교 클럽이 밀집해 있다. 매춘은 공공연히 이루어지며, 해당 구역에서는 합법적인 사업으로 인정된다.</p>
+                      <p>에스테라에서 쾌락은 죄가 아니다. 단, 값이 매겨질 뿐.</p>
+                      <p>최근에는 출처가 불분명한 신종 향정 물질이 유통되고 있다. ‘별가루’, ‘백몽’, ‘낙원의 숨결’ 등 다양한 이름으로 불리며, 복용 시 극도의 황홀감과 감각 왜곡을 유발한다고 알려져 있다.</p>
+                      <p>이 물질의 최초 유통 경로는 밝혀지지 않았으나, 현재 에스테라가 주요 집산지로 지목되고 있다. 발데인 가문은 이를 공식적으로 부인하고 있다.</p>
+                    </div>
+
+                    <div class="accPanel" id="central-site">
+                      <h3>■ 결계석</h3>
+                      <p>각 경계에는 일정 간격으로 묘비 형태의 돌이 박혀 있다. 이를 ‘결계석’이라 부른다.</p>
+                      <p>투박하게 다듬은 검은 돌을 땅에 깊이 꽂아 세운 구조이며, 표면에는 작은 문양과 이름이 새겨져 있다.</p>
+                      <p>겉보기에는 오래된 묘비와 다를 바 없다.</p>
+                      <p>결계석은 에스테라를 보호하는 결계를 유지하는 장치로 알려져 있다. 외부의 침입, 대규모 재난, 마력 교란을 차단하는 기능을 가진다고 전해진다.</p>
+                      <p>돌의 내부 구조와 작동 원리에 대해서는 발데인 가문 외에는 정확히 아는 자가 없다.</p>
+                      <p>일부 학자는 결계석이 단순한 마력 축적 장치가 아니라 ‘지속적인 동력’을 필요로 하는 구조라고 주장한다. 그러나 이에 대한 공식 기록은 존재하지 않는다.</p>
+                      <p>비석 한쪽에 새겨진 이름이 무엇을 의미하는지에 대해서도 도시는 명확한 답을 내놓지 않는다.</p>
+                      <p>발데인 가문은 이를 '도시를 위한 헌신자들의 기록'이라 설명할 뿐이다.</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+
+      </div>
     </div>
 
     <!-- ✅ 4) 전체 지도 (자리만) -->
@@ -813,9 +1251,9 @@ function startStory(){
   },500);
 }
 
-/* Enter */
+/* Enter (인트로 시작) */
 document.addEventListener("keydown", e=>{
-  if(e.key==="Enter") startStory();
+  if(e.key==="Enter" && !started) startStory();
 });
 
 /* 클릭 */
@@ -865,136 +1303,115 @@ bgmToggle.addEventListener("click", ()=>{
 });
 
 /* =========================
-   ✅ 지역 상세 데이터 + 클릭 바인딩
+   ✅ 지역: 플립(한 번에 하나) + 내부 아코디언(2개)
+   - 카드 클릭/Enter/Space: 플립
+   - 뒤로 버튼: 원복
+   - ESC: 열려있는 카드 원복
+   - 키워드 버튼: 아코디언 토글(한 번에 하나)
    ========================= */
-const regionDetailTitle = document.getElementById("regionDetailTitle");
-const regionDetailBody = document.getElementById("regionDetailBody");
+const regionGrid = document.getElementById("regionGrid");
 
-const regionData = {
-  east: {
-    title: "동부",
-    html: `
-      <h3>■ 매바람 황야</h3>
-      <p>대륙 동부에 펼쳐진 광활한 모래사막 지대. 공식 명칭은 매바람 황야라 불린다.</p>
-      <p>이 지역은 기후가 극단적이다. 낮에는 살을 태울 듯한 열기가 지속되고, 밤이 되면 급격히 기온이 떨어진다.</p>
-      <p>강한 모래바람이 자주 불어 시야를 가리며, 지형은 끊임없이 변한다.</p>
-      <p>황야에는 몬스터가 밀집해 있다. 특히 사막형 포식종과 변이 생물이 다수 서식하며, 이동 상단과 여행자들이 자주 습격을 당한다.</p>
-      <p>농경이나 정착엔 불리하지만 전략적 가치는 높다. 황야를 가로지르는 유일한 고개를 통제하는 자가 동부 교역로 전체를 장악하게 되기 때문이다.</p>
-      <hr class="sep">
-      <h3>■ 고개 요새 스톤폴</h3>
-      <p>매바람 황야 중앙의 협곡 고개에 세워진 대형 석조 요새. 이곳을 스톤폴이라 부른다.</p>
-      <p>가파른 절벽 사이에 자리 잡은 천연 요충지로, 동서 교역로의 관문 역할을 한다.</p>
-      <p>현재 스톤폴은 오스카르트 가문의 지배 아래에 있다. 가문은 이곳에서 10년마다 ‘전투연’을 열어 가장 강한 자를 왕으로 추대해왔다.</p>
-    `
-  },
-
-  west: {
-    title: "서부",
-    html: `
-      <h3>■ 실렌하임 영지</h3>
-      <p>대륙 서쪽 끝, 해가 길게 머무르지 않는 땅. 이곳을 실렌하임 영지라 부른다.</p>
-      <p>연중 짙은 안개가 숲을 뒤덮고 있으며, 일조량이 부족해 농경은 제한적이다. 대신 음습한 숲과 습지가 광범위하게 형성되어 있다.</p>
-      <p>영지는 하나의 중심 도시가 아닌, 점처럼 흩어진 거점들로 이루어져 있다. 각 거점은 독립적으로 보이지만, 영주인 '첫 아비' 라자르 실렌하임의 혈연으로 이루어져 있으며, 이를 ‘혈맹 거점’이라 부른다.</p>
-      <hr class="sep">
-      <h3>■ 암시장</h3>
-      <p>실렌하임 영지는 대륙 최대 규모의 암시장이 형성된 지역으로 알려져 있다. 밀수품과 금지된 의식 도구, 신원 세탁과 인신 매매까지, 공식 기록에 남지 않는 거래가 주로 이루어진다.</p>
-      <p>일부 주술적 거래에는 실렌하임 혈맹의 권능이 개입된다. 이때 체결되는 것이 이른바 ‘피 계약’이다.</p>
-      <p>겉으로는 단순한 맹약처럼 보이지만, 계약이 성립되는 순간 당사자는 혈맹의 질서에 묶인다. 그 과정에서 속임수에 휘말려 실렌하임 일족으로 편입되는 자도 적지 않다.</p>
-      <p>한번 피로 맺어진 계약은 쉽게 끊어지지 않는다. 영지를 벗어난 뒤에도 그 효력이 사라지지 않는다고 전해진다.</p>
-    `
-  },
-
-  south: {
-    title: "남부",
-    html: `
-      <h3>■ 레티아</h3>
-      <p>카르니스 최대 규모의 항구이자 학술 도시.</p>
-      <p>남부 해안에 위치하며, 대륙에서 가장 활발한 해상 교역이 이루어지는 곳이다. 정확한 건립 연대는 전해지지 않지만, 세르몬트 가문이 본거지로 삼은 이후 도시의 성격이 급격히 변했다.</p>
-      <p>세르몬트는 해상 교역을 장려했고, 카르니스 내부 세력뿐 아니라 바다 너머의 이민족들과도 적극적으로 교류하였다.</p>
-      <p>그 과정에서 외부의 문화, 기술, 언어, 학문이 유입되었고, 레티아는 단순한 항구 도시에서 지식의 중심지로 발전했다.</p>
-      <p>현재 레티아는 상인과 선원뿐 아니라 학자, 기록관, 연금술사, 기술자 등 다양한 탐구자들이 모이는 도시다. 대륙에서 가장 많은 외래 문헌과 이국 서적이 유통되는 곳이기도 하다.</p>
-      <hr class="sep">
-      <h3>■ 검은 탑</h3>
-      <p>세르몬트 가문의 성 인근에는 ‘검은 탑’이라 불리는 거대한 석조 탑이 존재한다. 도시의 상징이자, 레티아가 학술 도시로 자리 잡게 된 핵심 시설이다.</p>
-      <p>검은 탑은 총 100층 구조로 이루어져 있으며, 내부에는 방대한 연구 서적, 학술지, 고문서, 각종 기록, 이민족 문헌, 금서 등이 보관되어 있다. 대륙에서 가장 큰 지식 보관 시설로 알려져 있다.</p>
-      <p>탑은 상층부로 갈수록 보안이 강화되며, 일부 층은 외부에 존재 자체가 공개되지 않는다. 최상층에서 어떤 연구가 이루어지는지는 기밀로 취급된다.</p>
-    `
-  },
-
-  north: {
-    title: "북부",
-    html: `
-      <h3>■ 아르케인 산맥</h3>
-      <p>대륙 최북단을 가로지르는 거대한 만년설 지대. 공식 명칭은 아르케인 산맥.</p>
-      <p>연중 대부분이 눈과 얼음으로 뒤덮여 있으며, 해빙기는 짧고 여름조차 냉기를 품는다.</p>
-      <p>깎아지른 고산 협곡과 깊은 설빙 균열이 이어져 있어 외부인의 접근은 극히 어렵다.</p>
-      <p>과거 이 산맥은 노르벨 가문의 영토였다. 예언과 속죄를 중시하던 가문은 세속과 거리를 두고 산맥 깊은 곳에서 은거하듯 살아왔다.</p>
-      <p>그러나 현재 산맥 대부분은 오스카르트 가문이 점령한 상태다. 군사적 요충지로서의 가치를 노린 침공이었다고 전해진다.</p>
-      <p>눈의 일족은 적극적으로 저항하지 않았다. 그들의 선택이었는지, 의도된 반응이었는지는 밝혀지지 않았다.</p>
-      <hr class="sep">
-      <h3>■ 백안의 전당 벨세인</h3>
-      <p>노르벨의 가주는 대대로 벨세인에서 속죄의 의식을 치른 뒤 예언을 행했다.</p>
-      <p>미래를 묻기 위해 찾아오는 자들이 있었으나, 예언의 전말은 가주 외에는 누구에게도 전해지지 않는다.</p>
-      <p>현재 산맥의 대부분은 오스카르트의 지배 아래에 있다. 다만 침략 당시 노르벨의 장로 일곱 명이 희생하여 벨세인만은 보전되었다고 기록되어 있다.</p>
-    `
-  },
-
-  central: {
-    title: "중앙",
-    html: `
-      <h3>■ 에스테라</h3>
-      <p>사치와 향락의 도시. 지상낙원이라 불린다.</p>
-      <p>카르니스 대륙 중앙에 자리 잡은 원형 도시로, 결계석으로 이루어진 세 겹의 원형 경계로 나뉘어 있다.</p>
-      <p>에스테라는 오래전부터 상업과 쾌락 산업으로 번영해왔다. 대륙 각지의 상인, 귀족, 추방자, 모험가들이 이곳을 찾는다.</p>
-      <p>제 2환에는 고급 연회장과 향락관, 도박장, 사교 클럽이 밀집해 있다. 매춘은 공공연히 이루어지며, 해당 구역에서는 합법적인 사업으로 인정된다.</p>
-      <p>에스테라에서 쾌락은 죄가 아니다. 단, 값이 매겨질 뿐.</p>
-      <p>최근에는 출처가 불분명한 신종 향정 물질이 유통되고 있다. ‘별가루’, ‘백몽’, ‘낙원의 숨결’ 등 다양한 이름으로 불리며, 복용 시 극도의 황홀감과 감각 왜곡을 유발한다고 알려져 있다.</p>
-      <p>이 물질의 최초 유통 경로는 밝혀지지 않았으나, 현재 에스테라가 주요 집산지로 지목되고 있다. 발데인 가문은 이를 공식적으로 부인하고 있다.</p>
-
-      <hr class="sep">
-
-      <h3>■ 결계석</h3>
-      <p>각 경계에는 일정 간격으로 묘비 형태의 돌이 박혀 있다. 이를 ‘결계석’이라 부른다.</p>
-      <p>투박하게 다듬은 검은 돌을 땅에 깊이 꽂아 세운 구조이며, 표면에는 작은 문양과 이름이 새겨져 있다.</p>
-      <p>겉보기에는 오래된 묘비와 다를 바 없다.</p>
-      <p>결계석은 에스테라를 보호하는 결계를 유지하는 장치로 알려져 있다. 외부의 침입, 대규모 재난, 마력 교란을 차단하는 기능을 가진다고 전해진다.</p>
-      <p>돌의 내부 구조와 작동 원리에 대해서는 발데인 가문 외에는 정확히 아는 자가 없다.</p>
-      <p>일부 학자는 결계석이 단순한 마력 축적 장치가 아니라 ‘지속적인 동력’을 필요로 하는 구조라고 주장한다. 그러나 이에 대한 공식 기록은 존재하지 않는다.</p>
-      <p>비석 한쪽에 새겨진 이름이 무엇을 의미하는지에 대해서도 도시는 명확한 답을 내놓지 않는다.</p>
-      <p>발데인 가문은 이를 '도시를 위한 헌신자들의 기록'이라 설명할 뿐이다.</p>
-    `
-  }
-};
-
-function openRegion(key){
-  const data = regionData[key];
-  if(!data || !regionDetailTitle || !regionDetailBody) return;
-
-  regionDetailTitle.textContent = data.title;
-  regionDetailBody.innerHTML = data.html;
-
-  const detail = document.getElementById("regionDetail");
-  if(detail){
-    detail.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-}
-
-function bindRegionCards(){
-  const cards = document.querySelectorAll("#regionGrid .regionCard");
-  cards.forEach(card=>{
-    const key = card.dataset.region;
-
-    card.addEventListener("click", ()=> openRegion(key));
-    card.addEventListener("keydown", (e)=>{
-      if(e.key === "Enter" || e.key === " "){
-        e.preventDefault();
-        openRegion(key);
-      }
-    });
+function closeAllFlips(exceptBtn = null){
+  const cards = regionGrid ? regionGrid.querySelectorAll(".regionCard") : [];
+  cards.forEach(btn=>{
+    if(exceptBtn && btn === exceptBtn) return;
+    btn.classList.remove("is-flipped");
+    btn.setAttribute("aria-expanded","false");
+    resetAccordion(btn);
   });
 }
 
-bindRegionCards();
+function resetAccordion(cardBtn){
+  const kwBtns = cardBtn.querySelectorAll(".kwBtn");
+  const panels = cardBtn.querySelectorAll(".accPanel");
+  kwBtns.forEach(b=> b.setAttribute("aria-expanded","false"));
+  panels.forEach(p=> p.classList.remove("active"));
+}
+
+function flipCard(cardBtn){
+  const isOn = cardBtn.classList.contains("is-flipped");
+  if(isOn){
+    cardBtn.classList.remove("is-flipped");
+    cardBtn.setAttribute("aria-expanded","false");
+    resetAccordion(cardBtn);
+  } else {
+    closeAllFlips(cardBtn);
+    cardBtn.classList.add("is-flipped");
+    cardBtn.setAttribute("aria-expanded","true");
+  }
+}
+
+function toggleAccordion(cardBtn, targetId){
+  const kwBtns = cardBtn.querySelectorAll(".kwBtn");
+  const panels = cardBtn.querySelectorAll(".accPanel");
+  const targetPanel = cardBtn.querySelector("#" + CSS.escape(targetId));
+  if(!targetPanel) return;
+
+  const isActive = targetPanel.classList.contains("active");
+
+  // 한 번에 하나만
+  kwBtns.forEach(b=> b.setAttribute("aria-expanded","false"));
+  panels.forEach(p=> p.classList.remove("active"));
+
+  if(!isActive){
+    targetPanel.classList.add("active");
+    const ownerBtn = cardBtn.querySelector(`.kwBtn[data-item="${CSS.escape(targetId)}"]`);
+    if(ownerBtn) ownerBtn.setAttribute("aria-expanded","true");
+  }
+}
+
+if(regionGrid){
+  regionGrid.addEventListener("click", (e)=>{
+    const backBtn = e.target.closest('button[data-action="flipBack"]');
+    if(backBtn){
+      e.stopPropagation();
+      const cardBtn = e.target.closest(".regionCard");
+      if(cardBtn) flipCard(cardBtn);
+      return;
+    }
+
+    const kw = e.target.closest(".kwBtn");
+    if(kw){
+      e.stopPropagation();
+      const cardBtn = e.target.closest(".regionCard");
+      if(!cardBtn) return;
+      const id = kw.dataset.item;
+      toggleAccordion(cardBtn, id);
+      return;
+    }
+
+    const cardBtn = e.target.closest(".regionCard");
+    if(cardBtn){
+      flipCard(cardBtn);
+    }
+  });
+
+  regionGrid.addEventListener("keydown", (e)=>{
+    const cardBtn = e.target.closest(".regionCard");
+    if(!cardBtn) return;
+
+    // ESC: 현재 카드 닫기
+    if(e.key === "Escape"){
+      e.preventDefault();
+      closeAllFlips(null);
+      return;
+    }
+
+    // Enter/Space: 카드 플립 (키워드 버튼 위에서는 버튼 기본 동작)
+    const isKw = e.target.classList && (e.target.classList.contains("kwBtn") || e.target.classList.contains("backBtn"));
+    if(!isKw && (e.key === "Enter" || e.key === " ")){
+      e.preventDefault();
+      flipCard(cardBtn);
+    }
+  });
+}
+
+// 전역 ESC: 어떤 카드든 닫기
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape"){
+    closeAllFlips(null);
+  }
+});
 
 updateBgmButton();
 </script>
