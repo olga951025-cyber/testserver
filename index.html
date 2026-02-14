@@ -136,21 +136,28 @@ body{
   border:1px solid var(--line);
   border-radius:18px;
   padding:40px 20px;
-  background:rgba(255,255,255,0.04);
-  transition: opacity 600ms ease;
 
-  position: relative;
-  overflow: hidden;
+  /* ✅ 종이 느낌(살짝 따뜻한 톤 + 결) */
+  background:
+    radial-gradient(800px 500px at 50% 0%, rgba(255,235,200,0.10), transparent 55%),
+    radial-gradient(900px 700px at 50% 65%, rgba(255,255,255,0.06), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.02)),
+    rgba(255,255,255,0.035);
+
+  transition: opacity 600ms ease;
+  position: relative; /* ✅ 캔버스 얹기 위해 */
+  overflow: hidden;   /* ✅ 테두리 밖 불티 잘림 */
 }
 
+/* ✅ 인트로 위에 얹는 불타는 캔버스 */
 #ashCanvas{
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  opacity: 0.55;
-  mix-blend-mode: screen;
+  opacity: 0.95;
+  mix-blend-mode: lighter;
 }
 
 /* ✅ 인트로 제목: 폰트 + 붉은색 적용 */
@@ -159,77 +166,6 @@ body{
   letter-spacing: 1px;
   font-weight: normal;
   color: var(--blood);
-}
-
-/* =========================
-   ✅ Intro title: ember effect
-   ========================= */
-.introTitle{
-  margin: 0;
-  position: relative;
-  display: inline-block;
-}
-
-.introTitle .ember{
-  position: relative;
-  display: inline-block;
-  color: rgba(142,43,43,0.92);
-  text-shadow:
-    0 0 8px rgba(142,43,43,0.18),
-    0 0 18px rgba(40,0,0,0.35);
-  filter: saturate(0.95) contrast(1.02);
-}
-
-.introTitle .ember::before{
-  content: attr(data-text);
-  position: absolute;
-  inset: 0;
-  color: transparent;
-
-  background: linear-gradient(
-    180deg,
-    rgba(255,200,120,0.20) 0%,
-    rgba(255,120,0,0.16) 38%,
-    rgba(160,25,25,0.22) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-
-  filter: blur(7px);
-  opacity: 0.55;
-  mix-blend-mode: screen;
-  transform: translateY(0);
-  animation: emberGlow 2.6s ease-in-out infinite;
-  pointer-events: none;
-}
-
-.introTitle .ember::after{
-  content: "";
-  position: absolute;
-  left: -4%;
-  right: -4%;
-  top: -14px;
-  height: 22px;
-
-  background:
-    radial-gradient(10px 12px at 18% 85%, rgba(255,150,60,0.18), transparent 68%),
-    radial-gradient(12px 14px at 45% 70%, rgba(255,210,120,0.14), transparent 70%),
-    radial-gradient(10px 12px at 74% 82%, rgba(180,30,30,0.12), transparent 70%);
-  opacity: 0.45;
-  filter: blur(0.4px);
-  animation: emberLick 1.9s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes emberGlow{
-  0%   { opacity: 0.45; filter: blur(7px); transform: translateY(0); }
-  50%  { opacity: 0.62; filter: blur(9px); transform: translateY(-1px); }
-  100% { opacity: 0.45; filter: blur(7px); transform: translateY(0); }
-}
-@keyframes emberLick{
-  0%   { opacity: 0.28; transform: translateY(1px); }
-  50%  { opacity: 0.55; transform: translateY(-1px); }
-  100% { opacity: 0.28; transform: translateY(1px); }
 }
 
 .press{
@@ -830,7 +766,7 @@ h1{
   object-fit: cover;
 }
 
-/* 모달 안 키워드 + 아코디언 */
+/* 모달 안 키워드 + 아코디언(원본 스타일 재사용) */
 .modalBody .keywordRow{
   display: flex;
   flex-wrap: wrap;
@@ -930,11 +866,13 @@ body.modal-open{
 
 <div class="stage">
 
-<section id="intro">
-  <canvas id="ashCanvas" aria-hidden="true"></canvas>
-  <h2 class="introTitle"><span class="ember">태초의 신이 먹힌 밤</span></h2>
-  <div class="press" id="pressBtn">PRESS ENTER</div>
-</section>
+  <section id="intro">
+    <!-- ✅ 불타는 효과 캔버스 -->
+    <canvas id="ashCanvas" aria-hidden="true"></canvas>
+
+    <h2>태초의 신이 먹힌 밤</h2>
+    <div class="press" id="pressBtn">PRESS ENTER</div>
+  </section>
 
   <section id="mainContent">
     <!-- ✅ 1) 창세 신화 -->
@@ -1265,7 +1203,8 @@ body.modal-open{
                 <p>대륙 최북단 만년설 산맥.</p>
 
                 <div class="regionMini">
-                  <p class="miniSummary">눈과 얼음이 영토를 지배한다.<br>고산 협곡과 설빙 균열은 외부인의 길을 끊는다.</p>
+                  <p class="miniSummary">눈과 얼음이 영토를 지배한다.
+                     <br>고산 협곡과 설빙 균열은 외부인의 길을 끊는다.</p>
                   <div class="regionMiniTags">
                     <span class="regionMiniTag">아르케인 산맥</span>
                     <span class="regionMiniTag">벨세인</span>
@@ -1276,8 +1215,14 @@ body.modal-open{
 
               <div class="regionBack">
                 <div class="backWrap">
+                  <div class="backTop">
+                    <h3 class="backTitle">북부 기록</h3>
+                    <button class="backBtn" type="button" data-action="flipBack" aria-label="뒤로 돌아가기">← 돌아가기</button>
+                  </div>
+
                   <div class="backSummary">
-                    <p>눈과 얼음이 영토를 지배한다.<br>고산 협곡과 설빙 균열은 외부인의 길을 끊는다.</p>
+                    <p>눈과 얼음이 영토를 지배한다.
+                       <br>고산 협곡과 설빙 균열은 외부인의 길을 끊는다.</p>
                   </div>
 
                   <div class="keywordRow" role="tablist" aria-label="북부 항목 선택">
@@ -1323,7 +1268,8 @@ body.modal-open{
                 <p>카르니스 최대 항구이자 학술 도시</p>
 
                 <div class="regionMini">
-                  <p class="miniSummary">지식과 학술의 도시, 아름다운 레티아!<br>나그네여, 부디 그 혀를 조심하라.</p>
+                  <p class="miniSummary">지식과 학술의 도시, 아름다운 레티아!
+                     <br>나그네여, 부디 그 혀를 조심하라.</p>
                   <div class="regionMiniTags">
                     <span class="regionMiniTag">레티아</span>
                     <span class="regionMiniTag">검은 탑</span>
@@ -1334,8 +1280,14 @@ body.modal-open{
 
               <div class="regionBack">
                 <div class="backWrap">
+                  <div class="backTop">
+                    <h3 class="backTitle">남부 기록</h3>
+                    <button class="backBtn" type="button" data-action="flipBack" aria-label="뒤로 돌아가기">← 돌아가기</button>
+                  </div>
+
                   <div class="backSummary">
-                    <p>지식과 학술의 도시, 아름다운 레티아!<br>나그네여, 부디 그 혀를 조심하라.</p>
+                    <p>지식과 학술의 도시, 아름다운 레티아!
+                       <br>나그네여, 부디 그 혀를 조심하라.</p>
                   </div>
 
                   <div class="keywordRow" role="tablist" aria-label="남부 항목 선택">
@@ -1380,7 +1332,8 @@ body.modal-open{
                 <p>메마른 황야와 협곡 고개 요새</p>
 
                 <div class="regionMini">
-                  <p class="miniSummary">낮의 열기와 밤의 냉기가 번갈아 목을 조른다.<br>바람은 길을 지우고, 늙은 전사의 마지막 노랫소리가 울려 퍼진다.</p>
+                  <p class="miniSummary">낮의 열기와 밤의 냉기가 번갈아 목을 조른다.
+                     <br>바람은 길을 지우고, 늙은 전사의 마지막 노랫소리가 울려 퍼진다.</p>
                   <div class="regionMiniTags">
                     <span class="regionMiniTag">매바람 황야</span>
                     <span class="regionMiniTag">스톤폴</span>
@@ -1391,8 +1344,14 @@ body.modal-open{
 
               <div class="regionBack">
                 <div class="backWrap">
+                  <div class="backTop">
+                    <h3 class="backTitle">동부 기록</h3>
+                    <button class="backBtn" type="button" data-action="flipBack" aria-label="뒤로 돌아가기">← 돌아가기</button>
+                  </div>
+
                   <div class="backSummary">
-                    <p>낮의 열기와 밤의 냉기가 번갈아 목을 조른다.<br>바람은 길을 지우고, 늙은 전사의 마지막 노랫소리가 울려 퍼진다.</p>
+                    <p>낮의 열기와 밤의 냉기가 번갈아 목을 조른다.
+                       <br>바람은 길을 지우고, 늙은 전사의 마지막 노랫소리가 울려 퍼진다.</p>
                   </div>
 
                   <div class="keywordRow" role="tablist" aria-label="동부 항목 선택">
@@ -1437,7 +1396,8 @@ body.modal-open{
                 <p>빛이 들지 않는 혈맹의 땅</p>
 
                 <div class="regionMini">
-                  <p class="miniSummary">고독한 이들의 영원한 안식처.<br>피로 이어진 계약만이 영원하리라.</p>
+                  <p class="miniSummary">고독한 이들의 영원한 안식처.
+                     <br>피로 이어진 계약만이 영원하리라.</p>
                   <div class="regionMiniTags">
                     <span class="regionMiniTag">실렌하임 영지</span>
                     <span class="regionMiniTag">암시장</span>
@@ -1448,8 +1408,14 @@ body.modal-open{
 
               <div class="regionBack">
                 <div class="backWrap">
+                  <div class="backTop">
+                    <h3 class="backTitle">서부 기록</h3>
+                    <button class="backBtn" type="button" data-action="flipBack" aria-label="뒤로 돌아가기">← 돌아가기</button>
+                  </div>
+
                   <div class="backSummary">
-                    <p>고독한 이들의 영원한 안식처.<br>피로 이어진 계약만이 영원하리라.</p>
+                    <p>고독한 이들의 영원한 안식처.
+                       <br>피로 이어진 계약만이 영원하리라.</p>
                   </div>
 
                   <div class="keywordRow" role="tablist" aria-label="서부 항목 선택">
@@ -1493,7 +1459,8 @@ body.modal-open{
                 <p>사치와 향락의 도시</p>
 
                 <div class="regionMini">
-                  <p class="miniSummary">원형의 도시는 조상의 핏값으로 번영을 누린다.<br>돌에 새겨진 이름은 도시의 비밀을 지킨다.</p>
+                  <p class="miniSummary">원형의 도시는 조상의 핏값으로 번영을 누린다.
+                     <br>돌에 새겨진 이름은 도시의 비밀을 지킨다.</p>
                   <div class="regionMiniTags">
                     <span class="regionMiniTag">에스테라</span>
                     <span class="regionMiniTag">결계석</span>
@@ -1504,8 +1471,14 @@ body.modal-open{
 
               <div class="regionBack">
                 <div class="backWrap">
+                  <div class="backTop">
+                    <h3 class="backTitle">중앙 기록</h3>
+                    <button class="backBtn" type="button" data-action="flipBack" aria-label="뒤로 돌아가기">← 돌아가기</button>
+                  </div>
+
                   <div class="backSummary">
-                    <p>원형의 도시는 조상의 핏값으로 번영을 누린다.<br>돌에 새겨진 이름은 도시의 비밀을 지킨다.</p>
+                    <p>원형의 도시는 조상의 핏값으로 번영을 누린다.
+                       <br>돌에 새겨진 이름은 도시의 비밀을 지킨다.</p>
                   </div>
 
                   <div class="keywordRow" role="tablist" aria-label="중앙 항목 선택">
@@ -1807,12 +1780,10 @@ bgmToggle.addEventListener("click", ()=>{
 
 /* =========================
    ✅ 공용 모달 (지역 + 가문)
-   + 포커스 트랩(탭 이동이 모달 밖으로 빠지지 않게)
    ========================= */
 const regionGrid = document.getElementById("regionGrid");
 const familyGrid = document.getElementById("familyGrid");
 const modal = document.getElementById("regionModal");
-const modalDialog = modal.querySelector(".modalDialog");
 const modalTitle = document.getElementById("regionModalTitle");
 const modalBody = document.getElementById("regionModalBody");
 
@@ -1843,52 +1814,23 @@ function escapeHtml(str){
     .replaceAll("'","&#039;");
 }
 
-/* 포커스 트랩 유틸 */
-function getFocusable(container){
-  return Array.from(container.querySelectorAll(
-    'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-  )).filter(el => !el.hasAttribute("disabled") && !el.getAttribute("aria-hidden"));
-}
-
-function trapFocus(e){
-  if(!modal.classList.contains("show")) return;
-  if(e.key !== "Tab") return;
-
-  const focusables = getFocusable(modalDialog);
-  if(focusables.length === 0) return;
-
-  const first = focusables[0];
-  const last = focusables[focusables.length - 1];
-
-  if(e.shiftKey){
-    if(document.activeElement === first){
-      e.preventDefault();
-      last.focus();
-    }
-  } else {
-    if(document.activeElement === last){
-      e.preventDefault();
-      first.focus();
-    }
-  }
-}
-
-/* ✅ 지역: 카드 -> 모달 */
+/* ✅ 지역 */
 function openModalFromRegionCard(card){
   if(!card) return;
+
   lastFocusEl = document.activeElement;
 
   const titleText = card.querySelector(".regionFront h2")?.textContent?.trim() || "기록";
   const frontDesc = card.querySelector(".regionFront p")?.textContent?.trim() || "";
-  const summaryEl = card.querySelector(".regionBack .backSummary p");
-  const summaryHtml = summaryEl ? summaryEl.innerHTML : escapeHtml(frontDesc);
+  const summaryText = card.querySelector(".regionBack .backSummary p")?.textContent?.trim() || frontDesc;
 
   modalTitle.textContent = titleText;
+
   clearModal();
 
   const lead = document.createElement("div");
   lead.className = "modalLead";
-  lead.innerHTML = `<p>${summaryHtml}</p>`;
+  lead.innerHTML = `<p>${escapeHtml(summaryText)}</p>`;
   modalBody.appendChild(lead);
 
   const sourceWrap = card.querySelector(".regionBack .backWrap");
@@ -1923,9 +1865,6 @@ function openModalFromRegionCard(card){
   }
 
   setModalOpen(true);
-
-  const closeBtn = modal.querySelector('[data-action="closeModal"]');
-  if(closeBtn) closeBtn.focus({preventScroll:true});
 }
 
 function modalToggleAccordion(targetId){
@@ -1947,9 +1886,10 @@ function modalToggleAccordion(targetId){
   }
 }
 
-/* ✅ 가문: 카드 -> 모달 */
+/* ✅ 가문 */
 function openModalFromFamilyCard(card){
   if(!card) return;
+
   lastFocusEl = document.activeElement;
 
   const back = card.querySelector(".familyBack");
@@ -1958,6 +1898,7 @@ function openModalFromFamilyCard(card){
   const heroAlt = back?.dataset?.heroAlt || titleText;
 
   modalTitle.textContent = titleText;
+
   clearModal();
 
   if(heroSrc){
@@ -1967,11 +1908,11 @@ function openModalFromFamilyCard(card){
     modalBody.appendChild(hero);
   }
 
-  const summaryEl = back?.querySelector(".backSummary p");
-  if(summaryEl){
+  const summary = back?.querySelector(".backSummary p")?.textContent?.trim() || "";
+  if(summary){
     const lead = document.createElement("div");
     lead.className = "modalLead";
-    lead.innerHTML = `<p>${summaryEl.innerHTML}</p>`;
+    lead.innerHTML = `<p>${escapeHtml(summary)}</p>`;
     modalBody.appendChild(lead);
   }
 
@@ -1982,9 +1923,6 @@ function openModalFromFamilyCard(card){
   }
 
   setModalOpen(true);
-
-  const closeBtn = modal.querySelector('[data-action="closeModal"]');
-  if(closeBtn) closeBtn.focus({preventScroll:true});
 }
 
 function closeModal(){
@@ -2007,7 +1945,9 @@ if(regionGrid){
       return;
     }
     const card = e.target.closest(".regionCard");
-    if(card) openModalFromRegionCard(card);
+    if(card){
+      openModalFromRegionCard(card);
+    }
   });
 
   regionGrid.addEventListener("keydown", (e)=>{
@@ -2031,7 +1971,9 @@ if(familyGrid){
       return;
     }
     const card = e.target.closest(".familyCard");
-    if(card) openModalFromFamilyCard(card);
+    if(card){
+      openModalFromFamilyCard(card);
+    }
   });
 
   familyGrid.addEventListener("keydown", (e)=>{
@@ -2044,7 +1986,7 @@ if(familyGrid){
   });
 }
 
-/* 모달 내부 이벤트(닫기/바깥클릭/ESC + 지역 키워드 + 탭 트랩) */
+/* 모달 내부 이벤트(닫기/바깥클릭/ESC + 지역 키워드) */
 modal.addEventListener("click", (e)=>{
   if(e.target === modal){
     closeModal();
@@ -2066,18 +2008,21 @@ modal.addEventListener("click", (e)=>{
 });
 
 document.addEventListener("keydown", (e)=>{
-  if(e.key === "Escape" && modal.classList.contains("show")){
-    e.preventDefault();
-    closeModal();
-    return;
+  if(e.key === "Escape"){
+    if(modal.classList.contains("show")){
+      e.preventDefault();
+      closeModal();
+    }
   }
-  trapFocus(e);
 });
 
-/* 인트로 텍스트 ember data-text 세팅 */
-document.querySelectorAll(".introTitle .ember").forEach(el=> el.setAttribute("data-text", el.textContent));
+updateBgmButton();
 
-/* 잿가루 캔버스 */
+/* =========================
+   ✅ 인트로 "천천히 타들어가기" 캔버스
+   - 인트로에서만 동작
+   - startStory()로 intro가 display:none 되면 자동 정지
+   ========================= */
 (function(){
   const introEl = document.getElementById("intro");
   const canvas = document.getElementById("ashCanvas");
@@ -2087,10 +2032,17 @@ document.querySelectorAll(".introTitle .ember").forEach(el=> el.setAttribute("da
   let w=0, h=0, dpr=Math.max(1, Math.floor(window.devicePixelRatio || 1));
   let running = true;
 
-  const parts = [];
-  const COUNT = 34;
+  // ✅ 천천히 진행
+  let burn = 0;
+  let burnSpeed = 0.00055; // 더 천천히 원하면 0.00035
+
+  // 노이즈
+  let noise = [];
+  const NOISE_N = 260;
 
   function rand(min,max){ return min + Math.random()*(max-min); }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+  function smoothstep(t){ return t*t*(3-2*t); }
 
   function resize(){
     const r = introEl.getBoundingClientRect();
@@ -2099,50 +2051,161 @@ document.querySelectorAll(".introTitle .ember").forEach(el=> el.setAttribute("da
     canvas.width = w*dpr;
     canvas.height = h*dpr;
     ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-
-  function spawn(i, fromBottom=false){
-    parts[i] = {
-      x: rand(0,w),
-      y: fromBottom ? h + rand(10,60) : rand(0,h),
-      r: rand(0.6, 1.9),
-      vx: rand(-0.10, 0.20),
-      vy: rand(-0.18, -0.55),
-      a: rand(0.10, 0.32),
-      wob: rand(0, Math.PI*2),
-      wobSpd: rand(0.006, 0.016)
-    };
-  }
-
-  function init(){
-    resize();
-    parts.length = 0;
-    for(let i=0;i<COUNT;i++) spawn(i,false);
-  }
-
-  function draw(){
-    if(!running) return;
+    noise = new Array(NOISE_N).fill(0).map(()=> Math.random());
     ctx.clearRect(0,0,w,h);
+  }
 
-    for(let i=0;i<parts.length;i++){
-      const p = parts[i];
-      p.wob += p.wobSpd;
+  function n1(x){
+    if(NOISE_N <= 1) return 0.5;
+    const fx = (x / w) * (NOISE_N - 1);
+    const i0 = Math.floor(fx);
+    const i1 = Math.min(NOISE_N - 1, i0 + 1);
+    const t = smoothstep(fx - i0);
+    return noise[i0]*(1-t) + noise[i1]*t;
+  }
 
-      p.x += p.vx + Math.sin(p.wob)*0.10;
-      p.y += p.vy;
-      p.a -= 0.00035;
+  // 불티
+  const embers = [];
+  const EMBER_MAX = 60;
 
-      if(p.y < -20 || p.x < -30 || p.x > w+30 || p.a <= 0.06){
-        spawn(i,true);
-      }
+  function spawnEmber(x, y){
+    if(embers.length > EMBER_MAX) embers.shift();
+    const hot = rand(0.35, 1.0);
+    embers.push({
+      x, y,
+      r: rand(0.8, 2.0),
+      hot,
+      a: rand(0.30, 0.75),
+      vx: rand(-0.5, 0.7),
+      vy: -rand(0.7, 1.9) - hot*1.0,
+      tw: rand(0, 6.28),
+      flick: rand(0.06, 0.12),
+      life: rand(0.6, 1.0)
+    });
+  }
 
+  function drawEmber(p){
+    p.tw += p.flick;
+    const flicker = 0.75 + Math.sin(p.tw)*0.25;
+
+    const t = clamp(p.hot, 0, 1);
+    const R = Math.round(170 + 85*t);
+    const G = Math.round(35 + 110*t);
+    const B = Math.round(10 + 25*t);
+
+    const a = p.a * p.life * flicker;
+
+    const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r*7);
+    glow.addColorStop(0.0, `rgba(${R},${G},${B},${0.20*a})`);
+    glow.addColorStop(0.4, `rgba(${R},${G},${B},${0.10*a})`);
+    glow.addColorStop(1.0, `rgba(${R},${G},${B},0)`);
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r*7, 0, Math.PI*2);
+    ctx.fill();
+
+    const core = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r*1.6);
+    core.addColorStop(0.0, `rgba(255,235,200,${0.55*a})`);
+    core.addColorStop(0.35, `rgba(${R},${G},${B},${0.40*a})`);
+    core.addColorStop(1.0, `rgba(${R},${G},${B},0)`);
+    ctx.fillStyle = core;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r*1.8, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // 타는 경계선
+  function burnEdgeY(x){
+    const base = h - burn * (h + 40);
+    const jag = (n1(x) - 0.5) * 42;
+    const wave = Math.sin((x / w) * 10 + burn*7) * 8;
+    return base + jag + wave;
+  }
+
+  function drawBurn(){
+    // 잔상(연기처럼)
+    ctx.fillStyle = "rgba(0,0,0,0.14)";
+    ctx.fillRect(0,0,w,h);
+
+    // 그을림 영역
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+
+    ctx.beginPath();
+    ctx.moveTo(0, h+50);
+    for(let x=0; x<=w; x+=6){
+      ctx.lineTo(x, burnEdgeY(x));
+    }
+    ctx.lineTo(w, h+50);
+    ctx.closePath();
+
+    const g = ctx.createLinearGradient(0, h, 0, 0);
+    g.addColorStop(0.00, "rgba(0,0,0,0.66)");
+    g.addColorStop(0.35, "rgba(20,10,6,0.44)");
+    g.addColorStop(1.00, "rgba(0,0,0,0.00)");
+    ctx.fillStyle = g;
+    ctx.fill();
+
+    // 불타는 테두리
+    ctx.globalCompositeOperation = "lighter";
+    for(let x=0; x<=w; x+=10){
+      const y = burnEdgeY(x);
+
+      const glow = ctx.createRadialGradient(x, y, 0, x, y, 24);
+      glow.addColorStop(0.0, "rgba(255,190,120,0.18)");
+      glow.addColorStop(0.35,"rgba(255,120,60,0.11)");
+      glow.addColorStop(1.0, "rgba(255,80,30,0)");
+      ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.fillStyle = `rgba(190,190,190,${p.a})`;
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+      ctx.arc(x, y, 24, 0, Math.PI*2);
       ctx.fill();
+
+      ctx.fillStyle = "rgba(255,220,170,0.10)";
+      ctx.beginPath();
+      ctx.arc(x, y, 1.5, 0, Math.PI*2);
+      ctx.fill();
+
+      if(Math.random() < 0.22){
+        spawnEmber(x + rand(-6,6), y + rand(-3,5));
+      }
     }
 
-    requestAnimationFrame(draw);
+    ctx.restore();
+  }
+
+  function step(){
+    if(!running) return;
+
+    burn = clamp(burn + burnSpeed, 0, 1.15);
+    drawBurn();
+
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    for(let i=embers.length-1;i>=0;i--){
+      const p = embers[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vx *= 0.985;
+      p.vy *= 0.992;
+      p.life -= 0.010 + (1 - p.hot)*0.006;
+
+      drawEmber(p);
+
+      if(p.life <= 0 || p.y < -80 || p.x < -120 || p.x > w+120){
+        embers.splice(i,1);
+      }
+    }
+    ctx.restore();
+
+    // 끝까지 타면 천천히 다시 시작(반복감 줄이려 노이즈 갱신)
+    if(burn > 1.12){
+      burn = 0;
+      embers.length = 0;
+      noise = noise.map(()=> Math.random());
+      ctx.clearRect(0,0,w,h);
+    }
+
+    requestAnimationFrame(step);
   }
 
   function stop(){
@@ -2150,8 +2213,9 @@ document.querySelectorAll(".introTitle .ember").forEach(el=> el.setAttribute("da
     ctx.clearRect(0,0,w,h);
   }
 
-  init();
-  draw();
+  resize();
+  step();
+
   window.addEventListener("resize", resize);
 
   const obs = new MutationObserver(()=>{
@@ -2164,8 +2228,6 @@ document.querySelectorAll(".introTitle .ember").forEach(el=> el.setAttribute("da
     stop();
   }
 })();
-
-updateBgmButton();
 </script>
 
 </body>
